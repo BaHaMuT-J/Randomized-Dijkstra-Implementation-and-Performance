@@ -1,5 +1,6 @@
 package org.jmh.benchmark;
 
+import org.graph.ConstantDegreeGraph;
 import org.graph.IntArrayGraph;
 import org.openjdk.jmh.annotations.*;
 
@@ -26,5 +27,8 @@ public class BenchMarkRunner {
     public static void main(String[] args) {
         IntArrayGraph graph = IntArrayGraph.getInstance(4);
         graph.print();
+
+        ConstantDegreeGraph cGraph = ConstantDegreeGraph.fromIntArrayGraph(graph);
+        cGraph.print();
     }
 }

@@ -1,7 +1,10 @@
 package org.graph;
 
+import lombok.Getter;
+
 import java.util.*;
 
+@Getter
 public class IntArrayGraph {
     private final Integer[][] weights;
     private final Map<Integer, Set<Integer>> neighbors;
