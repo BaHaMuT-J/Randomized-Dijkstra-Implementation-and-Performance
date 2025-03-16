@@ -5,10 +5,7 @@ import org.graph.ConstantDegreeGraph;
 import org.graph.IntArrayGraph;
 import org.neo4j.graphalgo.impl.util.FibonacciHeap;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class RandomizedDijkstra {
 
@@ -86,6 +83,23 @@ public class RandomizedDijkstra {
 
     public void transform(int size, Integer source) {
         transform(IntArrayGraph.getInstance(size), source);
+    }
+
+    private Set<String> getSetR() {
+        Set<String> R = new HashSet<>();
+        int n = adjacencyList.size();
+        double k = Math.sqrt(Math.log(n) / Math.log(Math.log(n)));
+
+        for (Map.Entry<String, Map<String, Integer>> entry : adjacencyList.entrySet()) {
+            String node = entry.getKey();
+            if (Objects.equals(node, s) || random.nextDouble() > 1.0/k) {
+                continue;
+            }
+            R.add(node);
+        }
+
+        R.add(s);
+        return R;
     }
 
     public void bundleDijkstra() {
