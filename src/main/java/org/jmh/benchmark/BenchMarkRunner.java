@@ -1,5 +1,6 @@
 package org.jmh.benchmark;
 
+import org.graph.IntArrayGraph;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
@@ -20,5 +21,10 @@ public class BenchMarkRunner {
     @Measurement(iterations = 2)
     public static void test() {
 
+    }
+
+    public static void main(String[] args) {
+        IntArrayGraph graph = IntArrayGraph.getInstance(4);
+        graph.print();
     }
 }
