@@ -13,11 +13,11 @@ import java.util.Random;
 public class RandomizedDijkstra {
 
     @Getter
-    protected class HeapObject {
+    protected class NodeWithDistance {
         private final String node;
         private final Integer distance;
 
-        public HeapObject(String node, Integer distance) {
+        public NodeWithDistance(String node, Integer distance) {
             this.node = node;
             this.distance = distance;
         }
@@ -37,7 +37,7 @@ public class RandomizedDijkstra {
             {
                 return false;
             }
-            final HeapObject other = (HeapObject) obj;
+            final NodeWithDistance other = (NodeWithDistance) obj;
             if ( node == null )
             {
                 if ( other.node != null )
@@ -60,19 +60,35 @@ public class RandomizedDijkstra {
     }
 
     private final Random random;
-    private final ConstantDegreeGraph graph;
-    private final FibonacciHeap<HeapObject> fHeap;
+    private ConstantDegreeGraph graph;
+    private Map<String, Map<String, Integer>> adjacencyList;
+    private String s;
+    private final FibonacciHeap<NodeWithDistance> fHeap;
     private Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap;
 
     public RandomizedDijkstra() {
         this.random = new Random();
-        this.graph = ConstantDegreeGraph.fromIntArrayGraph(IntArrayGraph.getInstance(4));
-        this.fHeap = new FibonacciHeap<>(Comparator.comparingInt(HeapObject::getDistance));
+        this.fHeap = new FibonacciHeap<>(Comparator.comparingInt(NodeWithDistance::getDistance));
         this.heapNodeMap = new HashMap<>();
     }
 
     public void print() {
         graph.print();
+    }
+
+    public void transform(IntArrayGraph originalGraph, Integer source) {
+        Map<String, ConstantDegreeGraph> m = ConstantDegreeGraph.fromIntArrayGraphAndSource(originalGraph, source);
+        Map.Entry<String, ConstantDegreeGraph> entry = m.entrySet().iterator().next();
+        s = entry.getKey();
+        graph = entry.getValue();
+        adjacencyList = graph.getAdjacencyList();
+    }
+
+    public void transform(int size, Integer source) {
+        transform(IntArrayGraph.getInstance(size), source);
+    }
+
+    public void bundleDijkstra() {
     }
 
     private void relax(String node, Integer newDistance) {
