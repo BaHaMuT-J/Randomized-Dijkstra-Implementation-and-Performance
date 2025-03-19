@@ -10,7 +10,7 @@ import java.util.*;
 public class RandomizedDijkstra {
 
     @Getter
-    protected class NodeWithDistance {
+    protected static class NodeWithDistance {
         private final String node;
         private final Integer distance;
 
@@ -52,13 +52,14 @@ public class RandomizedDijkstra {
     private final Random random;
     private ConstantDegreeGraph graph;
     private Map<String, Map<String, Integer>> adjacencyList;
-    private Map<String, String> b;
-    private Map<String, Set<String>> Bundle;
-    private Map<String, Set<String>> Ball;
-    private Map<String, Integer> d;
+    private final Map<String, String> b;
+    private final Map<String, Set<String>> Bundle;
+    private final Map<String, Set<String>> Ball;
+    private final Map<String, Integer> d;
+    private final Map<String, Map<String, Integer>> dist;
     private String s;
     private final FibonacciHeap<NodeWithDistance> fHeap;
-    private Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap;
+    private final Map<String, FibonacciHeap<NodeWithDistance>.FibonacciHeapNode> heapNodeMap;
 
     public RandomizedDijkstra() {
         this.random = new Random(42);
@@ -66,6 +67,7 @@ public class RandomizedDijkstra {
         this.Bundle = new HashMap<>();
         this.Ball = new HashMap<>();
         this.d = new HashMap<>();
+        this.dist = new HashMap<>();
         this.fHeap = new FibonacciHeap<>(Comparator.comparingInt(NodeWithDistance::getDistance));
         this.heapNodeMap = new HashMap<>();
     }
@@ -124,11 +126,18 @@ public class RandomizedDijkstra {
             Set<String> bundle = Bundle.getOrDefault(u, new HashSet<>());
             bundle.add(u);
             Bundle.put(u, bundle);
+            b.put(u, u);
+
+            Map<String, Integer> dist_u = new HashMap<>();
+            dist_u.put(u, 0);
+            dist.put(u, dist_u);
         }
 
         for (String v : notR) {
             // for every vertex v not in R, run Dijkstra using v as a source
-            Map.Entry<Set<String>, String> entry = AdjacencyDijkstra.dijkstraStopR(adjacencyList, v, R);
+            Map.Entry<Map.Entry<Set<String>, String>, Map<String, Integer>> bigEntry = AdjacencyDijkstra.dijkstraStopR(adjacencyList, v, R);
+            Map.Entry<Set<String>, String> entry = bigEntry.getKey();
+            dist.put(v, bigEntry.getValue());
 
             // vertex u is closet node in R from v
             String u = entry.getValue();
@@ -168,11 +177,15 @@ public class RandomizedDijkstra {
             int d_u = nd.getDistance();
             heapNodeMap.remove(u);
 
-            for (String v : Bundle.get(u)) {
-                relax(v, d_u /* + dist(u, v) */, R);
-                Set<String> ball_v = Ball.get(v);
+            for (String v : Bundle.getOrDefault(u, new HashSet<>())) {
+                Map<String, Integer> dist_v = dist.get(v);
+                relax(v, d_u + dist_v.get(u), R);
+                Set<String> ball_v = Ball.getOrDefault(v, new HashSet<>());
                 for (String y : ball_v) {
-                    relax(y, d.getOrDefault(y, Integer.MAX_VALUE) /* + dist(y, v) */, R);
+                    int newDistance = !d.containsKey(y) ?
+                            Integer.MAX_VALUE
+                            : d.get(y) + dist_v.get(y);
+                    relax(y, newDistance, R);
                 }
                 ball_v.add(v);
                 for (String z2 : ball_v) {
@@ -181,20 +194,30 @@ public class RandomizedDijkstra {
                             .entrySet()) {
                         String z1 = entry.getKey();
                         int w_z1_z2 = entry.getValue();
-                        relax(v, d.get(z1) + w_z1_z2 /* + dist(y, z1) */, R);
+                        int newDistance = !d.containsKey(z1) ?
+                                Integer.MAX_VALUE
+                                : d.get(z1) + w_z1_z2 + dist_v.get(z2);
+                        relax(v, newDistance, R);
                     }
                 }
             }
 
-            for (String x : Bundle.get(u)) {
+            for (String x : Bundle.getOrDefault(u, new HashSet<>())) {
                 for (Map.Entry<String, Integer> entry : adjacencyList
                         .get(x)
                         .entrySet()) {
                     String y = entry.getKey();
                     int w_x_y = entry.getValue();
-                    relax(y, d.get(y) + w_x_y, R);
-                    for (String z1 : Ball.get(y)) {
-                        relax(z1, d.get(x) + w_x_y /* + dist(y, z1) */, R);
+                    int newDistance = !d.containsKey(y) ?
+                            Integer.MAX_VALUE
+                            : d.get(y) + w_x_y;
+                    relax(y, newDistance, R);
+                    for (String z1 : Ball.getOrDefault(y, new HashSet<>())) {
+                        newDistance = !d.containsKey(x) ?
+                                Integer.MAX_VALUE
+                                : d.get(x) + w_x_y;
+                        int dist_z1_y = R.contains(z1) ? dist.get(y).get(z1) : dist.get(z1).get(y);
+                        relax(z1, newDistance + dist_z1_y, R);
                     }
                 }
             }
@@ -219,12 +242,15 @@ public class RandomizedDijkstra {
     }
 
     private void relax(String v, Integer D, Set<String> R) {
-        if (D < d.get(v)) {
+        if (D < d.getOrDefault(v, Integer.MAX_VALUE)) {
             d.put(v, D);
             if (heapNodeMap.containsKey(v)) {
                 fHeap.decreaseKey(heapNodeMap.get(v), new NodeWithDistance(v, D));
             } else if (!R.contains(v)) {
-                relax(b.get(v), d.get(v) /* + dist(v, b.get(v))*/, R);
+                int newDistance = !d.containsKey(v) ?
+                        Integer.MAX_VALUE
+                        : d.get(v) + dist.get(v).get(b.get(v));
+                relax(b.get(v), newDistance, R);
             }
         }
     }

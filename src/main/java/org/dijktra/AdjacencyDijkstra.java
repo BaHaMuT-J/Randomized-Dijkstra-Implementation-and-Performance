@@ -75,7 +75,7 @@ public class AdjacencyDijkstra {
     }
 
     // For randomized Dijkstra, run sequential Dijkstra until node in R is extracted from Heap
-    public static Map.Entry<Set<String>, String> dijkstraStopR(Map<String, Map<String, Integer>> adjacencyList, String source, Set<String> R) {
+    public static Map.Entry<Map.Entry<Set<String>, String>, Map<String, Integer>> dijkstraStopR(Map<String, Map<String, Integer>> adjacencyList, String source, Set<String> R) {
         FibonacciHeap<Map.Entry<String, Integer>> fHeap = new FibonacciHeap<>(Map.Entry.comparingByValue());
         Map<String, Integer> distances = new HashMap<>();
         Set<String> visited = new HashSet<>();
@@ -111,6 +111,6 @@ public class AdjacencyDijkstra {
             }
         }
 
-        return Map.entry(visited, bundle);
+        return Map.entry(Map.entry(visited, bundle), distances);
     }
 }
