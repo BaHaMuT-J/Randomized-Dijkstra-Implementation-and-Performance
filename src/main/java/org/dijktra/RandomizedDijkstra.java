@@ -20,30 +20,23 @@ public class RandomizedDijkstra {
         }
 
         @Override
-        public boolean equals( Object obj )
-        {
-            if ( this == obj )
-            {
+        public boolean equals( Object obj ) {
+            if ( this == obj ) {
                 return true;
             }
-            if ( obj == null )
-            {
+            if ( obj == null ) {
                 return false;
             }
-            if ( getClass() != obj.getClass() )
-            {
+            if ( getClass() != obj.getClass() ) {
                 return false;
             }
             final NodeWithDistance other = (NodeWithDistance) obj;
-            if ( node == null )
-            {
-                if ( other.node != null )
-                {
+            if ( node == null ) {
+                if ( other.node != null ) {
                     return false;
                 }
             }
-            else if ( !node.equals( other.node ) )
-            {
+            else if ( !node.equals( other.node ) ) {
                 return false;
             }
             return true;
@@ -64,16 +57,26 @@ public class RandomizedDijkstra {
     private Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap;
 
     public RandomizedDijkstra() {
-        this.random = new Random();
+        this.random = new Random(42);
         this.fHeap = new FibonacciHeap<>(Comparator.comparingInt(NodeWithDistance::getDistance));
         this.heapNodeMap = new HashMap<>();
+    }
+
+    public RandomizedDijkstra(IntArrayGraph originalGraph, Integer source) {
+        this();
+        transform(originalGraph, source);
+    }
+
+    public RandomizedDijkstra(int size, Integer source) {
+        this();
+        transform(IntArrayGraph.getInstance(size), source);
     }
 
     public void print() {
         graph.print();
     }
 
-    public void transform(IntArrayGraph originalGraph, Integer source) {
+    private void transform(IntArrayGraph originalGraph, Integer source) {
         Map<String, ConstantDegreeGraph> m = ConstantDegreeGraph.fromIntArrayGraphAndSource(originalGraph, source);
         Map.Entry<String, ConstantDegreeGraph> entry = m.entrySet().iterator().next();
         s = entry.getKey();
@@ -81,14 +84,18 @@ public class RandomizedDijkstra {
         adjacencyList = graph.getAdjacencyList();
     }
 
-    public void transform(int size, Integer source) {
+    private void transform(int size, Integer source) {
         transform(IntArrayGraph.getInstance(size), source);
     }
 
-    private Set<String> getSetR() {
+    private double log2(double x) {
+        return Math.log(x) / Math.log(2);
+    }
+
+    public Set<String> getSetR() {
         Set<String> R = new HashSet<>();
         int n = adjacencyList.size();
-        double k = Math.sqrt(Math.log(n) / Math.log(Math.log(n)));
+        double k = Math.sqrt(log2(n) / log2(log2(n))); // Math.sqrt(Math.log(n) / Math.log(Math.log(n)));
 
         for (Map.Entry<String, Map<String, Integer>> entry : adjacencyList.entrySet()) {
             String node = entry.getKey();

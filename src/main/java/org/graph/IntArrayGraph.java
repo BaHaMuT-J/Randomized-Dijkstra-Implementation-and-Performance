@@ -15,7 +15,9 @@ public class IntArrayGraph {
     }
 
     public void print() {
-        System.out.println(Arrays.deepToString(weights));
+        for (Integer[] arr: weights) {
+            System.out.println(Arrays.toString(arr));
+        }
         System.out.println(neighbors);
     }
 
@@ -23,7 +25,7 @@ public class IntArrayGraph {
         Integer[][] weights = new Integer[size][size];
         Map<Integer, Set<Integer>> neighbors = new HashMap<>();
 
-        Random random = new Random();
+        Random random = new Random(42);
         for (int from = 0; from < size; from++) {
             for (int to = 0; to < size; to++) {
                 if (from == to || weights[from][to] != null || random.nextDouble() > 0.5) {
