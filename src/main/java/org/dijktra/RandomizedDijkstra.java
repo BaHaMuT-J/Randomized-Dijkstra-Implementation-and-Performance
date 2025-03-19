@@ -52,15 +52,17 @@ public class RandomizedDijkstra {
     private final Random random;
     private ConstantDegreeGraph graph;
     private Map<String, Map<String, Integer>> adjacencyList;
+    private Map<String, String> b;
     private Map<String, Set<String>> Bundle;
     private Map<String, Set<String>> Ball;
-    Map<String, Integer> d;
+    private Map<String, Integer> d;
     private String s;
     private final FibonacciHeap<NodeWithDistance> fHeap;
     private Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap;
 
     public RandomizedDijkstra() {
         this.random = new Random(42);
+        this.b = new HashMap<>();
         this.Bundle = new HashMap<>();
         this.Ball = new HashMap<>();
         this.d = new HashMap<>();
@@ -130,6 +132,7 @@ public class RandomizedDijkstra {
 
             // vertex u is closet node in R from v
             String u = entry.getValue();
+            b.put(v, u);
 
             // v is bundled to u
             Set<String> bundle = Bundle.getOrDefault(u, new HashSet<>());
@@ -159,18 +162,17 @@ public class RandomizedDijkstra {
             heapNodeMap.put(u, fNode);
         }
 
-//        fHeap.decreaseKey(heapNodeMap.get(s), new NodeWithDistance(s, 0));
-
         while (!fHeap.isEmpty()) {
             NodeWithDistance nd = fHeap.extractMin();
             String u = nd.getNode();
             int d_u = nd.getDistance();
+            heapNodeMap.remove(u);
 
             for (String v : Bundle.get(u)) {
-                relax(v, d_u /* + dist(u, v) */);
+                relax(v, d_u /* + dist(u, v) */, R);
                 Set<String> ball_v = Ball.get(v);
                 for (String y : ball_v) {
-                    relax(y, d.getOrDefault(y, Integer.MAX_VALUE) /* + dist(y, v) */);
+                    relax(y, d.getOrDefault(y, Integer.MAX_VALUE) /* + dist(y, v) */, R);
                 }
                 ball_v.add(v);
                 for (String z2 : ball_v) {
@@ -179,7 +181,7 @@ public class RandomizedDijkstra {
                             .entrySet()) {
                         String z1 = entry.getKey();
                         int w_z1_z2 = entry.getValue();
-                        relax(v, d.get(z1) + w_z1_z2 /* + dist(y, z1) */);
+                        relax(v, d.get(z1) + w_z1_z2 /* + dist(y, z1) */, R);
                     }
                 }
             }
@@ -190,9 +192,9 @@ public class RandomizedDijkstra {
                         .entrySet()) {
                     String y = entry.getKey();
                     int w_x_y = entry.getValue();
-                    relax(y, d.get(y) + w_x_y);
+                    relax(y, d.get(y) + w_x_y, R);
                     for (String z1 : Ball.get(y)) {
-                        relax(z1, d.get(x) + w_x_y /* + dist(y, z1) */);
+                        relax(z1, d.get(x) + w_x_y /* + dist(y, z1) */, R);
                     }
                 }
             }
@@ -212,8 +214,18 @@ public class RandomizedDijkstra {
 
         System.out.println("Bundle is " + Bundle);
         System.out.println("Ball is " + Ball);
+
+        System.out.println("SSSP is " + d);
     }
 
-    private void relax(String node, Integer newDistance) {
+    private void relax(String v, Integer D, Set<String> R) {
+        if (D < d.get(v)) {
+            d.put(v, D);
+            if (heapNodeMap.containsKey(v)) {
+                fHeap.decreaseKey(heapNodeMap.get(v), new NodeWithDistance(v, D));
+            } else if (!R.contains(v)) {
+                relax(b.get(v), d.get(v) /* + dist(v, b.get(v))*/, R);
+            }
+        }
     }
 }
