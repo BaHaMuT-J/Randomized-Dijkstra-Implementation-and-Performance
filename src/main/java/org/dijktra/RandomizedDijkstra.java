@@ -54,6 +54,7 @@ public class RandomizedDijkstra {
     private Map<String, Map<String, Integer>> adjacencyList;
     private Map<String, Set<String>> Bundle;
     private Map<String, Set<String>> Ball;
+    Map<String, Integer> d;
     private String s;
     private final FibonacciHeap<NodeWithDistance> fHeap;
     private Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap;
@@ -62,6 +63,7 @@ public class RandomizedDijkstra {
         this.random = new Random(42);
         this.Bundle = new HashMap<>();
         this.Ball = new HashMap<>();
+        this.d = new HashMap<>();
         this.fHeap = new FibonacciHeap<>(Comparator.comparingInt(NodeWithDistance::getDistance));
         this.heapNodeMap = new HashMap<>();
     }
@@ -146,8 +148,57 @@ public class RandomizedDijkstra {
         Map.Entry<Set<String>, Set<String>> entryR = getSetR();
         Set<String> R = entryR.getKey();
         Set<String> notR = entryR.getValue();
+
         formBundleAndBall(R, notR);
 
+        d.put(s, 0);
+
+        for (String u : R) {
+            NodeWithDistance nd = new NodeWithDistance(u, (Objects.equals(u, s) ? 0 : Integer.MAX_VALUE));
+            FibonacciHeap<NodeWithDistance>.FibonacciHeapNode fNode = fHeap.insert(nd);
+            heapNodeMap.put(u, fNode);
+        }
+
+//        fHeap.decreaseKey(heapNodeMap.get(s), new NodeWithDistance(s, 0));
+
+        while (!fHeap.isEmpty()) {
+            NodeWithDistance nd = fHeap.extractMin();
+            String u = nd.getNode();
+            int d_u = nd.getDistance();
+
+            for (String v : Bundle.get(u)) {
+                relax(v, d_u /* + dist(u, v) */);
+                Set<String> ball_v = Ball.get(v);
+                for (String y : ball_v) {
+                    relax(y, d.getOrDefault(y, Integer.MAX_VALUE) /* + dist(y, v) */);
+                }
+                ball_v.add(v);
+                for (String z2 : ball_v) {
+                    for (Map.Entry<String, Integer> entry : adjacencyList
+                            .get(z2)
+                            .entrySet()) {
+                        String z1 = entry.getKey();
+                        int w_z1_z2 = entry.getValue();
+                        relax(v, d.get(z1) + w_z1_z2 /* + dist(y, z1) */);
+                    }
+                }
+            }
+
+            for (String x : Bundle.get(u)) {
+                for (Map.Entry<String, Integer> entry : adjacencyList
+                        .get(x)
+                        .entrySet()) {
+                    String y = entry.getKey();
+                    int w_x_y = entry.getValue();
+                    relax(y, d.get(y) + w_x_y);
+                    for (String z1 : Ball.get(y)) {
+                        relax(z1, d.get(x) + w_x_y /* + dist(y, z1) */);
+                    }
+                }
+            }
+        }
+
+        // Test
         List<String> sortedR = new ArrayList<>(R);
         Collections.sort(sortedR);
         System.out.println("R is " + sortedR);
