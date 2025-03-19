@@ -29,7 +29,7 @@ public class BenchMarkRunner {
 
     public static void main(String[] args) {
         // Initialize basic integer graph
-        IntArrayGraph graph = IntArrayGraph.getInstance(5);
+        IntArrayGraph graph = IntArrayGraph.getInstance(8);
         graph.print();
 
         // Test transformation

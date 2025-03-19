@@ -92,22 +92,24 @@ public class AdjacencyDijkstra {
             Map.Entry<String, Integer> current = fHeap.extractMin();
             String u = current.getKey();
 
-            if (R.contains(u)) {
-                bundle = u;
-                break;
-            }
-
             if (visited.contains(u)) continue;
             visited.add(u);
 
             for (Map.Entry<String, Integer> neighbor : adjacencyList.getOrDefault(u, Collections.emptyMap()).entrySet()) {
                 String v = neighbor.getKey();
                 int weight = neighbor.getValue();
+                int newDistance = current.getValue() + weight;
 
-                if (!visited.contains(v) && distances.get(u) + weight < distances.get(v)) {
-                    distances.put(v, distances.get(u) + weight);
+                if (!visited.contains(v) && newDistance < distances.get(v)) {
+                    distances.put(v, newDistance);
                     fHeap.insert(new AbstractMap.SimpleEntry<>(v, distances.get(v)));
                 }
+            }
+
+            if (R.contains(u)) {
+                bundle = u;
+                visited.remove(u);
+                break;
             }
         }
 

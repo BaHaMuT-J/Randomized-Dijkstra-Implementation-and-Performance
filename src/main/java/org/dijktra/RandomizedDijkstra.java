@@ -83,7 +83,11 @@ public class RandomizedDijkstra {
     }
 
     public void print() {
-        graph.print();
+        List<String> sortedKeys = new ArrayList<>(d.keySet());
+        Collections.sort(sortedKeys);
+        for (String key : sortedKeys) {
+            System.out.println("Shortest distance to " + key + " is " + d.get(key));
+        }
     }
 
     private void transform(IntArrayGraph originalGraph, Integer source) {
@@ -123,11 +127,14 @@ public class RandomizedDijkstra {
     public void formBundleAndBall(Set<String> R, Set<String> notR) {
         for (String u : R) {
             // for every vertex u in R, b(u) = u
+            b.put(u, u);
+
+            // add u in Bundle(u)
             Set<String> bundle = Bundle.getOrDefault(u, new HashSet<>());
             bundle.add(u);
             Bundle.put(u, bundle);
-            b.put(u, u);
 
+            // distance for vertices in R need only itself
             Map<String, Integer> dist_u = new HashMap<>();
             dist_u.put(u, 0);
             dist.put(u, dist_u);
@@ -137,7 +144,6 @@ public class RandomizedDijkstra {
             // for every vertex v not in R, run Dijkstra using v as a source
             Map.Entry<Map.Entry<Set<String>, String>, Map<String, Integer>> bigEntry = AdjacencyDijkstra.dijkstraStopR(adjacencyList, v, R);
             Map.Entry<Set<String>, String> entry = bigEntry.getKey();
-            dist.put(v, bigEntry.getValue());
 
             // vertex u is closet node in R from v
             String u = entry.getValue();
@@ -146,13 +152,14 @@ public class RandomizedDijkstra {
             // v is bundled to u
             Set<String> bundle = Bundle.getOrDefault(u, new HashSet<>());
             bundle.add(v);
-            Bundle.put(entry.getValue(), bundle);
+            Bundle.put(u, bundle);
 
-            // for all vertices v meet before u, they are include in ball(v)
+            // for all vertices v meet before u, they are include in Ball(v)
             Set<String> verticesReachedBeforeU = entry.getKey();
-            Set<String> ball = Ball.getOrDefault(v, new HashSet<>());
-            ball.addAll(verticesReachedBeforeU);
-            Ball.put(v, ball);
+            Ball.put(v, verticesReachedBeforeU);
+
+            // distance from vertex v to each vertex in Ball(v)
+            dist.put(v, bigEntry.getValue());
         }
     }
 
@@ -185,7 +192,7 @@ public class RandomizedDijkstra {
                     int newDistance = !d.containsKey(y) ?
                             Integer.MAX_VALUE
                             : d.get(y) + dist_v.get(y);
-                    relax(y, newDistance, R);
+                    relax(v, newDistance, R);
                 }
                 ball_v.add(v);
                 for (String z2 : ball_v) {
@@ -200,6 +207,7 @@ public class RandomizedDijkstra {
                         relax(v, newDistance, R);
                     }
                 }
+                ball_v.remove(v);
             }
 
             for (String x : Bundle.getOrDefault(u, new HashSet<>())) {
@@ -208,37 +216,19 @@ public class RandomizedDijkstra {
                         .entrySet()) {
                     String y = entry.getKey();
                     int w_x_y = entry.getValue();
-                    int newDistance = !d.containsKey(y) ?
+                    int newDistance = !d.containsKey(x) ?
                             Integer.MAX_VALUE
-                            : d.get(y) + w_x_y;
+                            : d.get(x) + w_x_y;
                     relax(y, newDistance, R);
                     for (String z1 : Ball.getOrDefault(y, new HashSet<>())) {
                         newDistance = !d.containsKey(x) ?
                                 Integer.MAX_VALUE
-                                : d.get(x) + w_x_y;
-                        int dist_z1_y = R.contains(z1) ? dist.get(y).get(z1) : dist.get(z1).get(y);
-                        relax(z1, newDistance + dist_z1_y, R);
+                                : d.get(x) + w_x_y + dist.get(y).get(z1);
+                        relax(z1, newDistance, R);
                     }
                 }
             }
         }
-
-        // Test
-        List<String> sortedR = new ArrayList<>(R);
-        Collections.sort(sortedR);
-        System.out.println("R is " + sortedR);
-
-        List<String> sortedNotR = new ArrayList<>(notR);
-        Collections.sort(sortedNotR);
-        System.out.println("notR is " + sortedNotR);
-
-        System.out.println(sortedR.size());
-        System.out.println(sortedNotR.size());
-
-        System.out.println("Bundle is " + Bundle);
-        System.out.println("Ball is " + Ball);
-
-        System.out.println("SSSP is " + d);
     }
 
     private void relax(String v, Integer D, Set<String> R) {
