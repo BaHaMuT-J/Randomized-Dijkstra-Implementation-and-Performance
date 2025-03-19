@@ -52,12 +52,16 @@ public class RandomizedDijkstra {
     private final Random random;
     private ConstantDegreeGraph graph;
     private Map<String, Map<String, Integer>> adjacencyList;
+    private Map<String, Set<String>> Bundle;
+    private Map<String, Set<String>> Ball;
     private String s;
     private final FibonacciHeap<NodeWithDistance> fHeap;
     private Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap;
 
     public RandomizedDijkstra() {
         this.random = new Random(42);
+        this.Bundle = new HashMap<>();
+        this.Ball = new HashMap<>();
         this.fHeap = new FibonacciHeap<>(Comparator.comparingInt(NodeWithDistance::getDistance));
         this.heapNodeMap = new HashMap<>();
     }
@@ -92,24 +96,71 @@ public class RandomizedDijkstra {
         return Math.log(x) / Math.log(2);
     }
 
-    public Set<String> getSetR() {
+    public Map.Entry<Set<String>, Set<String>> getSetR() {
         Set<String> R = new HashSet<>();
+        Set<String> notR = new HashSet<>();
         int n = adjacencyList.size();
         double k = Math.sqrt(log2(n) / log2(log2(n))); // Math.sqrt(Math.log(n) / Math.log(Math.log(n)));
 
         for (Map.Entry<String, Map<String, Integer>> entry : adjacencyList.entrySet()) {
             String node = entry.getKey();
-            if (Objects.equals(node, s) || random.nextDouble() > 1.0/k) {
-                continue;
+            if (Objects.equals(node, s) || random.nextDouble() <= 1.0/k) {
+                R.add(node);
+            } else {
+                notR.add(node);
             }
-            R.add(node);
         }
 
-        R.add(s);
-        return R;
+        return Map.entry(R, notR);
+    }
+
+    public void formBundleAndBall(Set<String> R, Set<String> notR) {
+        for (String u : R) {
+            // for every vertex u in R, b(u) = u
+            Set<String> bundle = Bundle.getOrDefault(u, new HashSet<>());
+            bundle.add(u);
+            Bundle.put(u, bundle);
+        }
+
+        for (String v : notR) {
+            // for every vertex v not in R, run Dijkstra using v as a source
+            Map.Entry<Set<String>, String> entry = AdjacencyDijkstra.dijkstraStopR(adjacencyList, v, R);
+
+            // vertex u is closet node in R from v
+            String u = entry.getValue();
+
+            // v is bundled to u
+            Set<String> bundle = Bundle.getOrDefault(u, new HashSet<>());
+            bundle.add(v);
+            Bundle.put(entry.getValue(), bundle);
+
+            // for all vertices v meet before u, they are include in ball(v)
+            Set<String> verticesReachedBeforeU = entry.getKey();
+            Set<String> ball = Ball.getOrDefault(v, new HashSet<>());
+            ball.addAll(verticesReachedBeforeU);
+            Ball.put(v, ball);
+        }
     }
 
     public void bundleDijkstra() {
+        Map.Entry<Set<String>, Set<String>> entryR = getSetR();
+        Set<String> R = entryR.getKey();
+        Set<String> notR = entryR.getValue();
+        formBundleAndBall(R, notR);
+
+        List<String> sortedR = new ArrayList<>(R);
+        Collections.sort(sortedR);
+        System.out.println("R is " + sortedR);
+
+        List<String> sortedNotR = new ArrayList<>(notR);
+        Collections.sort(sortedNotR);
+        System.out.println("notR is " + sortedNotR);
+
+        System.out.println(sortedR.size());
+        System.out.println(sortedNotR.size());
+
+        System.out.println("Bundle is " + Bundle);
+        System.out.println("Ball is " + Ball);
     }
 
     private void relax(String node, Integer newDistance) {

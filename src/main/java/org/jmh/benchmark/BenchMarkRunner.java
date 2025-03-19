@@ -29,7 +29,7 @@ public class BenchMarkRunner {
 
     public static void main(String[] args) {
         // Initialize basic integer graph
-        IntArrayGraph graph = IntArrayGraph.getInstance(8);
+        IntArrayGraph graph = IntArrayGraph.getInstance(5);
         graph.print();
 
         // Test transformation
@@ -50,12 +50,7 @@ public class BenchMarkRunner {
         // Construct randomized Dijkstra environment
         RandomizedDijkstra randomizedDijkstra = new RandomizedDijkstra(graph, 0);
 
-        // Test forming set R
-        Set<String> R = randomizedDijkstra.getSetR();
-        List<String> sortedR = new ArrayList<>(R);
-        Collections.sort(sortedR);
-        System.out.println("R is " + sortedR);
-        System.out.println(sortedKeys.size());
-        System.out.println(sortedR.size());
+        // Test forming Bundle and Ball
+        randomizedDijkstra.bundleDijkstra();
     }
 }
