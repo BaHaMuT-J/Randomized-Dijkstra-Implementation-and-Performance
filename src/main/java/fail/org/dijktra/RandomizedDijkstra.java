@@ -1,9 +1,9 @@
-package org.dijktra;
+package fail.org.dijktra;
 
 import lombok.Getter;
-import org.graph.ConstantDegreeGraph;
-import org.graph.IntArrayGraph;
-import org.neo4j.graphalgo.impl.util.FibonacciHeap;
+import fail.org.graph.ConstantDegreeGraph;
+import fail.org.graph.IntArrayGraph;
+import fail.org.neo4j.graphalgo.impl.util.FibonacciHeap;
 
 import java.util.*;
 
@@ -183,6 +183,7 @@ public class RandomizedDijkstra {
             String u = nd.getNode();
             int d_u = nd.getDistance();
             heapNodeMap.remove(u);
+            System.out.println("Extracted " + u);
 
             for (String v : Bundle.getOrDefault(u, new HashSet<>())) {
                 Map<String, Integer> dist_v = dist.get(v);

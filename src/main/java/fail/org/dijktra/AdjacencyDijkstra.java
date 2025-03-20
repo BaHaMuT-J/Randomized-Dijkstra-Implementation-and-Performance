@@ -1,6 +1,6 @@
-package org.dijktra;
+package fail.org.dijktra;
 
-import org.neo4j.graphalgo.impl.util.FibonacciHeap;
+import fail.org.neo4j.graphalgo.impl.util.FibonacciHeap;
 
 import java.util.*;
 
@@ -43,22 +43,28 @@ public class AdjacencyDijkstra {
     // Using FibonacciHeap
     public static Map<String, Integer> dijkstraFib(Map<String, Map<String, Integer>> adjacencyList, String source) {
         FibonacciHeap<Map.Entry<String, Integer>> fHeap = new FibonacciHeap<>(Map.Entry.comparingByValue());
+        Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap = new HashMap<>();
         Map<String, Integer> distances = new HashMap<>();
         Set<String> visited = new HashSet<>();
 
 
         for (String node : adjacencyList.keySet()) {
-            distances.put(node, Integer.MAX_VALUE);
+            int dist = (node.equals(source) ? 0 : Integer.MAX_VALUE);
+            distances.put(node, dist);
+            FibonacciHeap.FibonacciHeapNode insertedNode = fHeap.insert(new AbstractMap.SimpleEntry<>(node, dist));
+            heapNodeMap.put(node, insertedNode);
         }
-        distances.put(source, 0);
-
-        fHeap.insert(new AbstractMap.SimpleEntry<>(source, 0));
 
         while (!fHeap.isEmpty()) {
             Map.Entry<String, Integer> current = fHeap.extractMin();
             String u = current.getKey();
+            heapNodeMap.remove(u);
+            System.out.println("Extracted " + u);
 
-            if (visited.contains(u)) continue;
+            if (visited.contains(u)) {
+                System.out.println("Continue");
+                continue;
+            }
             visited.add(u);
 
             for (Map.Entry<String, Integer> neighbor : adjacencyList.getOrDefault(u, Collections.emptyMap()).entrySet()) {
@@ -67,7 +73,7 @@ public class AdjacencyDijkstra {
 
                 if (!visited.contains(v) && distances.get(u) + weight < distances.get(v)) {
                     distances.put(v, distances.get(u) + weight);
-                    fHeap.insert(new AbstractMap.SimpleEntry<>(v, distances.get(v)));
+                    fHeap.decreaseKey(heapNodeMap.get(v), new AbstractMap.SimpleEntry<>(v, distances.get(v)));
                 }
             }
         }
@@ -76,9 +82,10 @@ public class AdjacencyDijkstra {
 
     // For randomized Dijkstra, run sequential Dijkstra until node in R is extracted from Heap
     public static Map.Entry<Map.Entry<Set<String>, String>, Map<String, Integer>> dijkstraStopR(Map<String, Map<String, Integer>> adjacencyList, String source, Set<String> R) {
+        System.out.println("DijkstraStopR source: " + source);
         FibonacciHeap<Map.Entry<String, Integer>> fHeap = new FibonacciHeap<>(Map.Entry.comparingByValue());
         Map<String, Integer> distances = new HashMap<>();
-        Set<String> visited = new HashSet<>();
+        Map<String, Integer> dist = new HashMap<>();
         String bundle = null;
 
         for (String node : adjacencyList.keySet()) {
@@ -92,15 +99,15 @@ public class AdjacencyDijkstra {
             Map.Entry<String, Integer> current = fHeap.extractMin();
             String u = current.getKey();
 
-            if (visited.contains(u)) continue;
-            visited.add(u);
+            if (dist.containsKey(u)) continue;
+            dist.put(u, current.getValue());
 
             for (Map.Entry<String, Integer> neighbor : adjacencyList.getOrDefault(u, Collections.emptyMap()).entrySet()) {
                 String v = neighbor.getKey();
                 int weight = neighbor.getValue();
                 int newDistance = current.getValue() + weight;
 
-                if (!visited.contains(v) && newDistance < distances.get(v)) {
+                if (!dist.containsKey(v) && newDistance < distances.get(v)) {
                     distances.put(v, newDistance);
                     fHeap.insert(new AbstractMap.SimpleEntry<>(v, distances.get(v)));
                 }
@@ -108,11 +115,13 @@ public class AdjacencyDijkstra {
 
             if (R.contains(u)) {
                 bundle = u;
-                visited.remove(u);
                 break;
             }
         }
 
-        return Map.entry(Map.entry(visited, bundle), distances);
+        Set<String> ball = dist.keySet();
+        ball.remove(bundle);
+
+        return Map.entry(Map.entry(ball, bundle), dist);
     }
 }

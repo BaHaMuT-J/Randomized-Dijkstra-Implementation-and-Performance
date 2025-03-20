@@ -1,4 +1,4 @@
-package org.graph;
+package fail.org.graph;
 
 import lombok.Getter;
 
