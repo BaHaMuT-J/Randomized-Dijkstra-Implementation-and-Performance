@@ -1,27 +1,27 @@
-package gabormakrai.dijkstra.performance.scenario;
+package org.dijkstra.performance.environment;
+
+import org.dijkstra.fib.PriorityQueueDijkstra;
+import org.dijkstra.fib.wrapper.heap.Neo4jPriorityObject;
+import org.dijkstra.fib.wrapper.heap.Neo4jPriorityQueue;
+import org.dijkstra.graph.NeighbourArrayGraphGenerator;
+import org.dijkstra.performance.PerformanceEnvironment;
 
 import java.util.Random;
 
-import gabormakrai.dijkstra.graph.NeighbourArrayGraphGenerator;
-import gabormakrai.dijkstra.performance.PerformanceScenario;
-import gabormakrai.dijkstra.priority.PriorityQueueDijkstra;
-import gabormakrai.dijkstra.priority.impl.Neo4jDijkstraPriorityObject;
-import gabormakrai.dijkstra.priority.impl.Neo4jFibonacciPrioityQueue;
+public class Neo4PriorityQueueEnvironment implements PerformanceEnvironment {
 
-public class RandomNeo4jFibonacciPriorityQueueScenario implements PerformanceScenario {
-	
 	NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
-	
+
 	int[] previous;
-	Neo4jDijkstraPriorityObject[] priorityObjectArray;
-	Neo4jFibonacciPrioityQueue priorityQueue;
+	Neo4jPriorityObject[] priorityObjectArray;
+	Neo4jPriorityQueue priorityQueue;
 	Random random;
-	
+
 	int size;
 	double p;
 	int previousArrayBuilds;
-	
-	public RandomNeo4jFibonacciPriorityQueueScenario(int size, double p, int previousArrayBuilds, Random random) {
+
+	public Neo4PriorityQueueEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;
@@ -40,10 +40,10 @@ public class RandomNeo4jFibonacciPriorityQueueScenario implements PerformanceSce
 	public void generateGraph() {
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
-		priorityQueue = new Neo4jFibonacciPrioityQueue();
-		priorityObjectArray = new Neo4jDijkstraPriorityObject[size];
+		priorityQueue = new Neo4jPriorityQueue();
+		priorityObjectArray = new Neo4jPriorityObject[size];
 		for (int i = 0; i < size; ++i) {
-			priorityObjectArray[i] = new Neo4jDijkstraPriorityObject(i, 0.0);
+			priorityObjectArray[i] = new Neo4jPriorityObject(i, 0);
 		}
 	}
 
@@ -51,14 +51,14 @@ public class RandomNeo4jFibonacciPriorityQueueScenario implements PerformanceSce
 	public int[] testPrevious(int randomSeed) {
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
-		priorityQueue = new Neo4jFibonacciPrioityQueue();
-		priorityObjectArray = new Neo4jDijkstraPriorityObject[size];
+		priorityQueue = new Neo4jPriorityQueue();
+		priorityObjectArray = new Neo4jPriorityObject[size];
 		for (int i = 0; i < size; ++i) {
-			priorityObjectArray[i] = new Neo4jDijkstraPriorityObject(i, 0.0);
+			priorityObjectArray[i] = new Neo4jPriorityObject(i, 0);
 		}
 		
 		int origin = random.nextInt(size);
-//		System.out.println("origin: " + origin);
+		System.out.println("origin: " + origin);
 		PriorityQueueDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, priorityObjectArray, priorityQueue);
 		
 		return previous;

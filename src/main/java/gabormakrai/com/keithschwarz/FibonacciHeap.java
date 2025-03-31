@@ -1,10 +1,10 @@
 package gabormakrai.com.keithschwarz;
 
 /***********************************************************************
- * File: FibonacciHeap.java
+ * File: FibHeap.java
  * Author: Keith Schwarz (htiek@cs.stanford.edu)
  *
- * An implementation of a priority queue backed by a Fibonacci heap,
+ * An implementation of a distance queue backed by a Fibonacci heap,
  * as described by Fredman and Tarjan.  Fibonacci heaps are interesting
  * theoretically because they have asymptotically good runtime guarantees
  * for many operations.  In particular, insert, peek, and decrease-key all
@@ -81,7 +81,7 @@ public final class FibonacciHeap<T> {
         private Entry<T> mChild;  // Child node, if any.
 
         private T      mElem;     // Element being stored here
-        private double mPriority; // Its priority
+        private double mPriority; // Its distance
 
         /**
          * Returns the element represented by this heap entry.
@@ -101,9 +101,9 @@ public final class FibonacciHeap<T> {
         }
 
         /**
-         * Returns the priority of this element.
+         * Returns the distance of this element.
          *
-         * @return The priority of this element.
+         * @return The distance of this element.
          */
         public double getPriority() {
             return mPriority;
@@ -111,10 +111,10 @@ public final class FibonacciHeap<T> {
 
         /**
          * Constructs a new Entry that holds the given element with the indicated 
-         * priority.
+         * distance.
          *
          * @param elem The element stored in this node.
-         * @param priority The priority of this element.
+         * @param priority The distance of this element.
          */
         private Entry(T elem, double priority) {
             mNext = mPrev = this;
@@ -131,11 +131,11 @@ public final class FibonacciHeap<T> {
 
     /**
      * Inserts the specified element into the Fibonacci heap with the specified
-     * priority.  Its priority must be a valid double, so you cannot set the
-     * priority to NaN.
+     * distance.  Its distance must be a valid double, so you cannot set the
+     * distance to NaN.
      *
      * @param value The value to insert.
-     * @param priority Its priority, which must be valid.
+     * @param priority Its distance, which must be valid.
      * @return An Entry representing that element in the tree.
      */
     public Entry<T> enqueue(T value, double priority) {
@@ -197,11 +197,11 @@ public final class FibonacciHeap<T> {
      *
      * @param one The first Fibonacci heap to merge.
      * @param two The second Fibonacci heap to merge.
-     * @return A new FibonacciHeap containing all of the elements of both
+     * @return A new FibHeap containing all of the elements of both
      *         heaps.
      */
     public static <T> FibonacciHeap<T> merge(FibonacciHeap<T> one, FibonacciHeap<T> two) {
-        /* Create a new FibonacciHeap to hold the result. */
+        /* Create a new FibHeap to hold the result. */
         FibonacciHeap<T> result = new FibonacciHeap<T>();
 
         /* Merge the two Fibonacci heap root lists together.  This helper function
@@ -361,7 +361,7 @@ public final class FibonacciHeap<T> {
             /* Update the global min based on this node.  Note that we compare
              * for <= instead of < here.  That's because if we just did a
              * reparent operation that merged two different trees of equal
-             * priority, we need to make sure that the min pointer points to
+             * distance, we need to make sure that the min pointer points to
              * the root-level one.
              */
             if (curr.mPriority <= mMin.mPriority) mMin = curr;
@@ -370,24 +370,24 @@ public final class FibonacciHeap<T> {
     }
 
     /**
-     * Decreases the key of the specified element to the new priority.  If the
-     * new priority is greater than the old priority, this function throws an
-     * IllegalArgumentException.  The new priority must be a finite double,
-     * so you cannot set the priority to be NaN, or +/- infinity.  Doing
+     * Decreases the key of the specified element to the new distance.  If the
+     * new distance is greater than the old distance, this function throws an
+     * IllegalArgumentException.  The new distance must be a finite double,
+     * so you cannot set the distance to be NaN, or +/- infinity.  Doing
      * so also throws an IllegalArgumentException.
      *
      * It is assumed that the entry belongs in this heap.  For efficiency
      * reasons, this is not checked at runtime.
      *
-     * @param entry The element whose priority should be decreased.
-     * @param newPriority The new priority to associate with this entry.
-     * @throws IllegalArgumentException If the new priority exceeds the old
-     *         priority, or if the argument is not a finite double.
+     * @param entry The element whose distance should be decreased.
+     * @param newPriority The new distance to associate with this entry.
+     * @throws IllegalArgumentException If the new distance exceeds the old
+     *         distance, or if the argument is not a finite double.
      */
     public void decreaseKey(Entry<T> entry, double newPriority) {
         checkPriority(newPriority);
         if (newPriority > entry.mPriority)
-            throw new IllegalArgumentException("New priority exceeds old.");
+            throw new IllegalArgumentException("New distance exceeds old.");
 
         /* Forward this to a helper function. */
         decreaseKeyUnchecked(entry, newPriority);
@@ -412,10 +412,10 @@ public final class FibonacciHeap<T> {
     }
 
     /**
-     * Utility function which, given a user-specified priority, checks whether
+     * Utility function which, given a user-specified distance, checks whether
      * it's a valid double and throws an IllegalArgumentException otherwise.
      *
-     * @param priority The user's specified priority.
+     * @param priority The user's specified distance.
      * @throws IllegalArgumentException If it is not valid.
      */
     private void checkPriority(double priority) {
@@ -497,16 +497,16 @@ public final class FibonacciHeap<T> {
 
     /**
      * Decreases the key of a node in the tree without doing any checking to ensure
-     * that the new priority is valid.
+     * that the new distance is valid.
      *
      * @param entry The node whose key should be decreased.
-     * @param priority The node's new priority.
+     * @param priority The node's new distance.
      */
     private void decreaseKeyUnchecked(Entry<T> entry, double priority) {
-        /* First, change the node's priority. */
+        /* First, change the node's distance. */
         entry.mPriority = priority;
 
-        /* If the node no longer has a higher priority than its parent, cut it.
+        /* If the node no longer has a higher distance than its parent, cut it.
          * Note that this also means that if we try to run a delete operation
          * that decreases the key to -infinity, it's guaranteed to cut the node
          * from its parent.
@@ -516,7 +516,7 @@ public final class FibonacciHeap<T> {
 
         /* If our new value is the new min, mark it as such.  Note that if we
          * ended up decreasing the key in a way that ties the current minimum
-         * priority, this will change the min accordingly.
+         * distance, this will change the min accordingly.
          */
         if (entry.mPriority <= mMin.mPriority)
             mMin = entry;

@@ -221,7 +221,7 @@ public abstract class AbstractLinkedHeap<TKey, TValue>
 		/**
 		 * Get the heap reference contained by this object.
 		 * 
-		 * @return FibonacciHeap the contained heap.
+		 * @return FibHeap the contained heap.
 		 * @see #setHeap(AbstractLinkedHeap)
 		 */
 		protected final AbstractLinkedHeap getHeap()

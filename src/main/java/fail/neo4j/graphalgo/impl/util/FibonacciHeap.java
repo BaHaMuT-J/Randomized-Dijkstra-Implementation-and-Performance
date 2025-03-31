@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * At least a partial implementation of a Fibonacci heap (a priority heap).
+ * At least a partial implementation of a Fibonacci heap (a distance heap).
  * Almost all code is based on the chapter about Fibonacci heaps in the book
  * "Introduction to Algorithms" by Cormen, Leiserson, Rivest and Stein (second
  * edition, 2001). Amortized times for almost all operations are O(1).
@@ -99,7 +99,7 @@ public class FibonacciHeap<KeyType>
     }
 
     /**
-     * @return The entry with the highest priority or null if the heap is empty.
+     * @return The entry with the highest distance or null if the heap is empty.
      */
     public FibonacciHeapNode getMinimum()
     {
@@ -178,8 +178,8 @@ public class FibonacciHeap<KeyType>
     }
 
     /**
-     * This removes and returns the entry with the highest priority.
-     * @return The value with the highest priority.
+     * This removes and returns the entry with the highest distance.
+     * @return The value with the highest distance.
      */
     public KeyType extractMin()
     {
@@ -307,9 +307,9 @@ public class FibonacciHeap<KeyType>
     }
 
     /**
-     * Raises the priority for an entry.
+     * Raises the distance for an entry.
      * @param node
-     *            The entry to receive a higher priority.
+     *            The entry to receive a higher distance.
      * @param newKey
      *            The new value.
      */

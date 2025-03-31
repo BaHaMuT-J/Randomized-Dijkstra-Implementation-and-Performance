@@ -40,7 +40,7 @@ public class AdjacencyDijkstra {
         return distances;
     }
 
-    // Using FibonacciHeap
+    // Using FibHeap
     public static Map<String, Integer> dijkstraFib(Map<String, Map<String, Integer>> adjacencyList, String source) {
         FibonacciHeap<Map.Entry<String, Integer>> fHeap = new FibonacciHeap<>(Map.Entry.comparingByValue());
         Map<String, FibonacciHeap.FibonacciHeapNode> heapNodeMap = new HashMap<>();

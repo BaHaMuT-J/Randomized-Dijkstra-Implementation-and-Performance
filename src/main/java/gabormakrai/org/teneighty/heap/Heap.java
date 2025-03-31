@@ -33,7 +33,7 @@ import java.util.NoSuchElementException;
 /**
  * A heap interface.
  * <p>
- * Heaps can be used as very efficient priority queues. Heaps do not work well
+ * Heaps can be used as very efficient distance queues. Heaps do not work well
  * as general purpose maps: They do not naturally support any sort of searching
  * operations or the deletion of arbitrary keys. In fact, the delete and
  * decrease key methods of this interface require that you have a reference to

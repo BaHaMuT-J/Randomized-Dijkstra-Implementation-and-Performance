@@ -27,7 +27,7 @@ import java.util.HashMap;
  *
  * <p>
  *
- * A Fibonacci heap is a very efficient data structure for priority
+ * A Fibonacci heap is a very efficient data structure for distance
  * queuing.  
  *
  */
@@ -65,7 +65,7 @@ public class FibonacciHeap {
     }
 
     /**
-     * Creates a new <code>FibonacciHeap</code>.
+     * Creates a new <code>FibHeap</code>.
      */
     public FibonacciHeap() {
         this.min= null;
@@ -74,7 +74,7 @@ public class FibonacciHeap {
 
     /**
      *  Adds the Object <code>item</code>, with the supplied
-     *  <code>priority</code>.
+     *  <code>distance</code>.
      */
     public void add(Object item, double priority) {
         if (itemsToNodes.containsKey(item))
@@ -94,7 +94,7 @@ public class FibonacciHeap {
 
     /**
      * Returns <code>true</code> if <code>item</code> exists in this
-     * <code>FibonacciHeap</code>, false otherwise.
+     * <code>FibHeap</code>, false otherwise.
      */
     public boolean contains(Object item) {
         return itemsToNodes.containsKey(item);
@@ -137,7 +137,7 @@ public class FibonacciHeap {
     }
 
     /**
-     * Returns the object which has the <em>lowest</em> priority in the
+     * Returns the object which has the <em>lowest</em> distance in the
      * heap.  If the heap is empty, <code>null</code> is returned.
      */
     public Object popMin() {
@@ -218,17 +218,17 @@ public class FibonacciHeap {
     }
 
     /**
-     * Decreases the <code>priority</code> value associated with
+     * Decreases the <code>distance</code> value associated with
      * <code>item</code>.
      *
      * <p>
      *
      * <code>item<code> must exist in the heap, and it's current
-     * priority must be greater than <code>priority</code>.
+     * distance must be greater than <code>distance</code>.
      *
      * @throws IllegalStateException if <code>item</code> does not exist
      * in the heap, or if <code>item</code> already has an equal or
-     * lower priority than the supplied<code>priority</code>.
+     * lower distance than the supplied<code>distance</code>.
      */
     public void decreaseKey(Object item, double priority) {
         FibonacciHeapNode node=
@@ -237,7 +237,7 @@ public class FibonacciHeap {
             throw new IllegalStateException("No such element: " + item);
         if (node.priority < priority)
             throw new IllegalStateException("decreaseKey(" + item + ", "
-                    + priority + ") called, but priority="
+                    + priority + ") called, but distance="
                     + node.priority);
         node.priority= priority;
         FibonacciHeapNode parent= node.parent;
