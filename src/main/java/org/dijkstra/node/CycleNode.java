@@ -1,5 +1,7 @@
 package org.dijkstra.node;
 
+import java.util.Objects;
+
 public class CycleNode implements Comparable<CycleNode> {
     public int OV; // original vertex
     public int ON; // original neighbor
@@ -21,5 +23,19 @@ public class CycleNode implements Comparable<CycleNode> {
             return ovCompare;
         }
         return Integer.compare(this.ON, other.ON);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        CycleNode that = (CycleNode) obj;
+        return this.OV == that.OV && this.ON == that.ON;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(OV, ON);
     }
 }

@@ -1,6 +1,8 @@
 package org.dijkstra.performance.environment;
 
+import org.dijkstra.fib.ConstantFibonacciHeapDijkstra;
 import org.dijkstra.fib.SetPriorityQueueDijkstra;
+import org.dijkstra.fib.wrapper.FibonacciObject;
 import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciHeap;
 import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciObject;
 import org.dijkstra.fib.wrapper.heap.Neo4jPriorityObject;
@@ -22,7 +24,7 @@ public class Neo4jConstantDegreeFibHeapEnvironment implements ConstantDegreePerf
 	ConstantDegreeGraph constantDegreeGraph = new ConstantDegreeGraph();
 
 	Map<CycleNode, CycleNode> previous;
-	Map<CycleNode, Neo4jFibonacciObject> fibonacciObjectMap;
+	Map<CycleNode, FibonacciObject> fibonacciObjectMap;
 	Neo4jFibonacciHeap fibonacciHeap;
 	Random random;
 
@@ -44,7 +46,13 @@ public class Neo4jConstantDegreeFibHeapEnvironment implements ConstantDegreePerf
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
 			CycleNode origin = originsList[i];
-//			SetPriorityQueueDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibonacciObjectMap, fibonacciHeap);
+			ConstantFibonacciHeapDijkstra.createPreviousArray(constantDegreeGraph.nodes,
+					constantDegreeGraph.neighbours,
+					constantDegreeGraph.weights,
+					origin,
+					previous,
+					fibonacciObjectMap,
+					fibonacciHeap);
 		}
 	}
 	
@@ -94,8 +102,14 @@ public class Neo4jConstantDegreeFibHeapEnvironment implements ConstantDegreePerf
 		}
 
 		System.out.println("origin: " + origin);
-//		SetPriorityQueueDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibonacciObjectMap, fibonacciHeap);
-		
+		ConstantFibonacciHeapDijkstra.createPreviousArray(constantDegreeGraph.nodes,
+				constantDegreeGraph.neighbours,
+				constantDegreeGraph.weights,
+				origin,
+				previous,
+				fibonacciObjectMap,
+				fibonacciHeap);
+
 		return previous;
 	}
 }

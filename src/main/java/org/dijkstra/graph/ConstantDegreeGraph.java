@@ -16,15 +16,6 @@ public class ConstantDegreeGraph {
         generateCycleNodesAndNeighbours(originalNeighbours);
 
         generateWeights(originalWeights);
-
-        // Test generateCycleNodesAndNeighbours
-        List<CycleNode> sortedList = new ArrayList<>(nodes);
-        Collections.sort(sortedList);
-        for (CycleNode cycleNode : sortedList) {
-            System.out.println(cycleNode);
-            System.out.println(neighbours.get(cycleNode));
-            System.out.println(weights.get(cycleNode));
-        }
     }
 
     private void generateCycleNodesAndNeighbours(Map<Integer, Set<Integer>> originalNeighbours) {

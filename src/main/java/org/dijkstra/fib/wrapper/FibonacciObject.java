@@ -23,4 +23,9 @@ public class FibonacciObject implements Comparable<FibonacciObject> {
             return -1;
         }
     }
+
+    @Override
+    public String toString() {
+        return "[distance=" + distance + ", node=" + node + "]";
+    }
 }
