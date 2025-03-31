@@ -1,5 +1,6 @@
 package org.dijkstra.fib;
 
+import fail.dijktra.RandomizedDijkstra;
 import org.dijkstra.fib.wrapper.FibHeap;
 import org.dijkstra.fib.wrapper.FibonacciObject;
 import org.dijkstra.node.CycleNode;
@@ -41,6 +42,79 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 				R,
 				notR);
 
+		for (CycleNode node : nodes) {
+			d.put(node, Integer.MAX_VALUE);
+		}
+		d.put(source, 0);
+
+		fibonacciHeap.clear();
+		for (CycleNode node : R) {
+			FibonacciObject object = fibonacciObjectMap.get(node);
+			object.distance = node == source ? 0 : Integer.MAX_VALUE;
+			fibonacciObjectMap.put(node, object);
+
+			// Set previous node to (-1, -1) for all nodes
+			previous.put(node, new CycleNode(-1, -1));
+
+			// Add all FibonacciObject in FibonacciHeap
+			fibonacciHeap.add(object);
+		}
+
+		// See inside R for debugging
+		List<CycleNode> sortedList = new ArrayList<>(R);
+		Collections.sort(sortedList);
+		for (CycleNode cycleNode : sortedList) {
+			System.out.println(cycleNode);
+			System.out.println(Bundle.get(cycleNode));
+		}
+
+		Set<CycleNode> extractedNodes = new HashSet<>();
+		while (fibonacciHeap.size() != 0) {
+
+			// extract min
+			FibonacciObject min = fibonacciHeap.extractMin();
+			CycleNode u = min.node;
+			extractedNodes.add(u);
+
+			for (CycleNode v : Bundle.get(u)) {
+				Map<CycleNode, Integer> dist_v = dist.get(v);
+				relax(v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+				Set<CycleNode> ball_v = Ball.getOrDefault(v, new HashSet<>());
+				for (CycleNode y : ball_v) {
+					int newDistance = d.get(y) + dist_v.get(y);
+					relax(v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+				}
+				ball_v.add(v);
+				for (CycleNode z2 : ball_v) {
+					for (CycleNode z1 : neighbours.get(z2)) {
+						int w_z1_z2 = weights.get(z1).get(z2);
+						int newDistance = d.get(z1) + w_z1_z2 + dist_v.get(z2);
+						relax(v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+					}
+				}
+				ball_v.remove(v);
+			}
+
+			
+		}
+	}
+
+	private static void relax(CycleNode v,
+							  Integer alt,
+							  Set<CycleNode> R,
+							  Set<CycleNode> extractedNodes,
+							  Map<CycleNode, FibonacciObject> fibonacciObjectMap,
+							  FibHeap<FibonacciObject> fibonacciHeap) {
+		if (alt < d.get(v)) {
+			d.put(v, alt);
+			if (R.contains(v) && !extractedNodes.contains(v)) {
+				fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(v), alt);
+			} else if (!R.contains(v)) {
+				CycleNode bundle = b.get(v);
+				int newDistance = d.get(v) + dist.get(v).get(bundle);
+				relax(bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+			}
+		}
 	}
 
 	private static double log2(double x) {
@@ -113,7 +187,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			}
 		}
 
-		Set<CycleNode> ball = shortestDist.keySet();
+		Set<CycleNode> ball = new HashSet<>(shortestDist.keySet());
 		ball.remove(bundle);
 
 		return Map.entry(Map.entry(ball, bundle), shortestDist);
@@ -166,6 +240,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			Ball.put(v, verticesReachedBeforeU);
 
 			// distance from vertex v to each vertex in Ball(v)
+			System.out.printf("v : %s | b_v : %s | ball_v ; %s | dist_v : %s\n", v, u, entry.getKey(), bigEntry.getValue());
 			dist.put(v, bigEntry.getValue());
 		}
 	}
