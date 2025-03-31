@@ -95,7 +95,17 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 				ball_v.remove(v);
 			}
 
-			
+			for (CycleNode x : Bundle.get(u)) {
+				for (CycleNode y : neighbours.get(x)) {
+					int w_x_y = weights.get(x).get(y);
+					int newDistance = d.get(x) + w_x_y;
+					relax(y, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+					for (CycleNode z1 : Ball.get(y)) {
+						newDistance = d.get(x) + w_x_y + dist.get(y).get(z1);
+						relax(z1, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+					}
+				}
+			}
 		}
 	}
 
@@ -208,6 +218,9 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			Set<CycleNode> bundle = new HashSet<>();
 			bundle.add(u);
 			Bundle.put(u, bundle);
+
+			// no Ball for nodes in R
+			Ball.put(u, new HashSet<>());
 
 			// distance for vertices in R need only itself
 			Map<CycleNode, Integer> dist_u = new HashMap<>();
