@@ -46,6 +46,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			d.put(node, Integer.MAX_VALUE);
 		}
 		d.put(source, 0);
+		previous.put(source, new CycleNode(-1, -1));
 
 		fibonacciHeap.clear();
 		for (CycleNode node : R) {
@@ -53,19 +54,8 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			object.distance = node == source ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
 
-			// Set previous node to (-1, -1) for all nodes
-			previous.put(node, new CycleNode(-1, -1));
-
 			// Add all FibonacciObject in FibonacciHeap
 			fibonacciHeap.add(object);
-		}
-
-		// See inside R for debugging
-		List<CycleNode> sortedList = new ArrayList<>(R);
-		Collections.sort(sortedList);
-		for (CycleNode cycleNode : sortedList) {
-			System.out.println(cycleNode);
-			System.out.println(Bundle.get(cycleNode));
 		}
 
 		Set<CycleNode> extractedNodes = new HashSet<>();
@@ -78,18 +68,18 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 
 			for (CycleNode v : Bundle.get(u)) {
 				Map<CycleNode, Integer> dist_v = dist.get(v);
-				relax(v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+				relax(u, v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				Set<CycleNode> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (CycleNode y : ball_v) {
 					int newDistance = d.get(y) + dist_v.get(y);
-					relax(v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+					relax(y, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				}
 				ball_v.add(v);
 				for (CycleNode z2 : ball_v) {
 					for (CycleNode z1 : neighbours.get(z2)) {
 						int w_z1_z2 = weights.get(z1).get(z2);
 						int newDistance = d.get(z1) + w_z1_z2 + dist_v.get(z2);
-						relax(v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+						relax(z2, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					}
 				}
 				ball_v.remove(v);
@@ -99,30 +89,33 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 				for (CycleNode y : neighbours.get(x)) {
 					int w_x_y = weights.get(x).get(y);
 					int newDistance = d.get(x) + w_x_y;
-					relax(y, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+					relax(x, y, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					for (CycleNode z1 : Ball.get(y)) {
 						newDistance = d.get(x) + w_x_y + dist.get(y).get(z1);
-						relax(z1, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+						relax(y, z1, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					}
 				}
 			}
 		}
 	}
 
-	private static void relax(CycleNode v,
+	private static void relax(CycleNode u,
+							  CycleNode v,
 							  Integer alt,
 							  Set<CycleNode> R,
 							  Set<CycleNode> extractedNodes,
 							  Map<CycleNode, FibonacciObject> fibonacciObjectMap,
-							  FibHeap<FibonacciObject> fibonacciHeap) {
-		if (alt < d.get(v)) {
+							  FibHeap<FibonacciObject> fibonacciHeap,
+							  Map<CycleNode, CycleNode> previous) {
+		if (alt >= 0 && alt < d.get(v)) {
 			d.put(v, alt);
-			if (R.contains(v) && !extractedNodes.contains(v)) {
-				fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(v), alt);
-			} else if (!R.contains(v)) {
+			previous.put(v, u);
+			if (!R.contains(v)) {
 				CycleNode bundle = b.get(v);
 				int newDistance = d.get(v) + dist.get(v).get(bundle);
-				relax(bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap);
+				relax(v, bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+			} else if (!extractedNodes.contains(v)) {
+				fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(v), alt);
 			}
 		}
 	}
@@ -253,7 +246,6 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			Ball.put(v, verticesReachedBeforeU);
 
 			// distance from vertex v to each vertex in Ball(v)
-			System.out.printf("v : %s | b_v : %s | ball_v ; %s | dist_v : %s\n", v, u, entry.getKey(), bigEntry.getValue());
 			dist.put(v, bigEntry.getValue());
 		}
 	}

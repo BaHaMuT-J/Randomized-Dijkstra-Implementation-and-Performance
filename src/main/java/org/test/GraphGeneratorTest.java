@@ -59,16 +59,16 @@ public class GraphGeneratorTest {
 
         Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
         ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
-        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
+//        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
 
-//        System.out.println("*********************************************************");
-//
-//        // Test previous map
-//        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
-//        Collections.sort(sortedList);
-//        for (CycleNode cycleNode : sortedList) {
-//            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
-//        }
+        System.out.println("*********************************************************");
+
+        // Test previous map
+        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
+        Collections.sort(sortedList);
+        for (CycleNode cycleNode : sortedList) {
+            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
+        }
     }
 
     public static void main(String[] args) {
@@ -101,9 +101,9 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-//        GraphGeneratorTest.parameterizedMeasurementConstantDegree(10, 0.5);
-//
-//        System.out.println("*********************************************************");
+        GraphGeneratorTest.parameterizedMeasurementConstantDegree(10, 0.5);
+
+        System.out.println("*********************************************************");
 
         GraphGeneratorTest.parameterizedMeasurementConstantDegreeRandomized(10, 0.5);
     }
