@@ -30,17 +30,20 @@ public class Neo4jConstantDegreeFibHeapEnvironment implements ConstantDegreePerf
 	double p;
 	int previousArrayBuilds;
 
+	CycleNode[] originsList;
+
 	public Neo4jConstantDegreeFibHeapEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;
 		this.random = random;
+		this.originsList = new CycleNode[previousArrayBuilds];
 	}
 	
 	@Override
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
-			int origin = random.nextInt(size);
+			CycleNode origin = originsList[i];
 //			SetPriorityQueueDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibonacciObjectMap, fibonacciHeap);
 		}
 	}
@@ -54,6 +57,15 @@ public class Neo4jConstantDegreeFibHeapEnvironment implements ConstantDegreePerf
 		fibonacciObjectMap = new HashMap<>();
 		for (CycleNode node : constantDegreeGraph.nodes) {
 			fibonacciObjectMap.put(node, new Neo4jFibonacciObject(node, 0));
+		}
+
+		// Prepare origins for each test iteration
+		for (int i = 0; i < previousArrayBuilds; ++i) {
+			int randomIndex = random.nextInt(constantDegreeGraph.nodes.size());
+			Iterator<CycleNode> iterator = constantDegreeGraph.nodes.iterator();
+			for (int j = 0; j <= randomIndex; ++j) {
+				originsList[i] = iterator.next();
+			}
 		}
 	}
 
