@@ -9,6 +9,7 @@ import org.dijkstra.performance.ConstantDegreePerformanceTest;
 import org.dijkstra.performance.PerformanceEnvironment;
 import org.dijkstra.performance.PerformanceTest;
 import org.dijkstra.performance.environment.Neo4jConstantDegreeFibHeapEnvironment;
+import org.dijkstra.performance.environment.Neo4jConstantDegreeFibHeapRandomizedEnvironment;
 import org.dijkstra.performance.environment.Neo4jPriorityQueueEnvironment;
 import org.dijkstra.performance.environment.Neo4jSetPriorityQueueEnvironment;
 
@@ -53,6 +54,23 @@ public class GraphGeneratorTest {
         }
     }
 
+    private static void parameterizedMeasurementConstantDegreeRandomized(int size, double p) {
+        ConstantDegreePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jConstantDegreeFibHeapRandomizedEnvironment(size, p, 20, new Random(42));
+
+        Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
+        ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
+        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
+
+//        System.out.println("*********************************************************");
+//
+//        // Test previous map
+//        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
+//        Collections.sort(sortedList);
+//        for (CycleNode cycleNode : sortedList) {
+//            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
+//        }
+    }
+
     public static void main(String[] args) {
 //        NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 //        generator.generateRandomGraph(10, 0.5, new Random(42));
@@ -83,6 +101,10 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurementConstantDegree(10, 0.5);
+//        GraphGeneratorTest.parameterizedMeasurementConstantDegree(10, 0.5);
+//
+//        System.out.println("*********************************************************");
+
+        GraphGeneratorTest.parameterizedMeasurementConstantDegreeRandomized(10, 0.5);
     }
 }
