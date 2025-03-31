@@ -15,15 +15,16 @@ public class ConstantDegreeGraph {
 
         generateCycleNodesAndNeighbours(originalNeighbours);
 
+        generateWeights(originalWeights);
+
         // Test generateCycleNodesAndNeighbours
         List<CycleNode> sortedList = new ArrayList<>(nodes);
         Collections.sort(sortedList);
         for (CycleNode cycleNode : sortedList) {
             System.out.println(cycleNode);
             System.out.println(neighbours.get(cycleNode));
+            System.out.println(weights.get(cycleNode));
         }
-
-        generateWeights(originalWeights);
     }
 
     private void generateCycleNodesAndNeighbours(Map<Integer, Set<Integer>> originalNeighbours) {
@@ -73,5 +74,18 @@ public class ConstantDegreeGraph {
         neighbours.put(v, neighbors);
     }
 
-    private void generateWeights(Map<Integer, Map<Integer, Integer>> originalWeights) {}
+    private void generateWeights(Map<Integer, Map<Integer, Integer>> originalWeights) {
+        weights = new HashMap<>();
+        for (CycleNode u : nodes) {
+            Map<CycleNode, Integer> weightsU = new HashMap<>();
+            for (CycleNode v : neighbours.get(u)) {
+                if (u.OV == v.OV) {
+                    weightsU.put(v, 0);
+                } else {
+                    weightsU.put(v, originalWeights.get(u.OV).get(v.OV));
+                }
+            }
+            weights.put(u, weightsU);
+        }
+    }
 }
