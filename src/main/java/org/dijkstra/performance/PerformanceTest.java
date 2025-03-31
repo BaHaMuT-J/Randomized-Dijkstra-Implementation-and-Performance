@@ -49,8 +49,8 @@ public class PerformanceTest {
         averageShortestPathWithoutExrtremes /= (double)(repeats - skipHigh - skipLow);
 
         if (printAverageTimes) {
-            System.out.println("AverageShortestPathTime: " + averageShortestPathTime);
-            System.out.println("AverageShortestPathTimeWithoutExtremes: " + averageShortestPathWithoutExrtremes);
+            System.out.println("AverageShortestPathTime: " + averageShortestPathTime + " seconds");
+            System.out.println("AverageShortestPathTimeWithoutExtremes: " + averageShortestPathWithoutExrtremes + " seconds");
         }
 
         return averageShortestPathWithoutExrtremes;

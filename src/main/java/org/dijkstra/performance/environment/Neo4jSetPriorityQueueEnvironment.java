@@ -51,6 +51,10 @@ public class Neo4jSetPriorityQueueEnvironment implements PerformanceEnvironment 
 	public int[] testPrevious(int randomSeed) {
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
+
+		System.out.println(generator.neighbours);
+		System.out.println(generator.weights);
+
 		priorityQueue = new Neo4jPriorityQueue();
 		priorityObjectArray = new Neo4jPriorityObject[size];
 		for (int i = 0; i < size; ++i) {

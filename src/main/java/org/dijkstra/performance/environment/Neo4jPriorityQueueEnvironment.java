@@ -6,6 +6,7 @@ import org.dijkstra.fib.wrapper.heap.Neo4jPriorityQueue;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;
 import org.dijkstra.performance.PerformanceEnvironment;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Neo4jPriorityQueueEnvironment implements PerformanceEnvironment {
@@ -51,6 +52,10 @@ public class Neo4jPriorityQueueEnvironment implements PerformanceEnvironment {
 	public int[] testPrevious(int randomSeed) {
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
+
+		System.out.println(Arrays.deepToString(generator.neighbours));
+		System.out.println(Arrays.deepToString(generator.weights));
+
 		priorityQueue = new Neo4jPriorityQueue();
 		priorityObjectArray = new Neo4jPriorityObject[size];
 		for (int i = 0; i < size; ++i) {

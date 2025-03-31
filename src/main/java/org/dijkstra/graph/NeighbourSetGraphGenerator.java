@@ -22,6 +22,7 @@ public class NeighbourSetGraphGenerator {
     private void generateSet(int size) {
         for (int i = 0; i < size; ++i) {
             neighbours.put(i, new HashSet<Integer>());
+            weights.put(i, new HashMap<Integer, Integer>());
         }
     }
 
@@ -88,10 +89,18 @@ public class NeighbourSetGraphGenerator {
                 continue;
             }
 
-            Map<Integer, Integer> weightsI = new HashMap<>();
-            for (Integer neighbor : neighborsI) {
+            Map<Integer, Integer> weightsI = weights.get(i);
+            for (Integer j : neighborsI) {
+                Map<Integer, Integer> weightsJ = weights.get(j);
+                if (weightsI.containsKey(j) || weightsJ.containsKey(i)) {
+                    continue;
+                }
+
                 int weight = random.nextInt(size*2) + 1; // get random weight that not zero
-                weightsI.put(neighbor, weight);
+                weightsI.put(j, weight);
+
+                weightsJ.put(i, weight);
+                weights.put(j, weightsJ);
             }
             weights.put(i, weightsI);
         }

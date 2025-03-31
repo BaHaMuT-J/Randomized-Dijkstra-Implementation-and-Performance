@@ -33,24 +33,24 @@ public class GraphGeneratorTest {
     }
 
     public static void main(String[] args) {
-        NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
-        generator.generateRandomGraph(5, 0.5, new Random(42));
-        System.out.println(Arrays.deepToString(generator.neighbours));
-        System.out.println(Arrays.deepToString(generator.weights));
+//        NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
+//        generator.generateRandomGraph(10, 0.5, new Random(42));
+//        System.out.println(Arrays.deepToString(generator.neighbours));
+//        System.out.println(Arrays.deepToString(generator.weights));
+//
+//        System.out.println("*********************************************************");
+
+        GraphGeneratorTest.parameterizedMeasurement(10, 0.5);
 
         System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurement(5, 0.5);
+//        NeighbourSetGraphGenerator generator2 = new NeighbourSetGraphGenerator();
+//        generator2.generateRandomGraph(10, 0.5, new Random(42));
+//        System.out.println(generator2.neighbours);
+//        System.out.println(generator2.weights);
+//
+//        System.out.println("*********************************************************");
 
-        System.out.println("*********************************************************");
-
-        NeighbourSetGraphGenerator generator2 = new NeighbourSetGraphGenerator();
-        generator2.generateRandomGraph(5, 0.5, new Random(42));
-        System.out.println(generator2.neighbours);
-        System.out.println(generator2.weights);
-
-        System.out.println("*********************************************************");
-
-        GraphGeneratorTest.parameterizedMeasurementSet(5, 0.5);
+        GraphGeneratorTest.parameterizedMeasurementSet(10, 0.5);
     }
 }
