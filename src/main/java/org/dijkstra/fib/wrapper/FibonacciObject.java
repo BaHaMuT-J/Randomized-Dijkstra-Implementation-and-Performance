@@ -1,14 +1,16 @@
 package org.dijkstra.fib.wrapper;
 
+import org.dijkstra.node.CycleNode;
+
 /**
  * Customize object going into FibHeap for Dijkstra
  */
 public class FibonacciObject implements Comparable<FibonacciObject> {
 
     public int distance; // distance from source to this vertex
-    public String node; // vertex name (u_v)
+    public CycleNode node; // vertex name (u_v)
 
-    public FibonacciObject(String node, int distance) {
+    public FibonacciObject(CycleNode node, int distance) {
         this.node = node;
         this.distance = distance;
     }
