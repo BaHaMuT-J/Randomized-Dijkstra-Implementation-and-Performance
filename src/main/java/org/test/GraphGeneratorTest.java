@@ -1,7 +1,9 @@
 package org.test;
 
+import org.dijkstra.graph.ConstantDegreeGraph;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;
 import org.dijkstra.graph.NeighbourSetGraphGenerator;
+import org.dijkstra.node.CycleNode;
 import org.dijkstra.performance.PerformanceEnvironment;
 import org.dijkstra.performance.PerformanceTest;
 import org.dijkstra.performance.environment.Neo4jPriorityQueueEnvironment;
@@ -40,9 +42,9 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurement(10, 0.5);
-
-        System.out.println("*********************************************************");
+//        GraphGeneratorTest.parameterizedMeasurement(10, 0.5);
+//
+//        System.out.println("*********************************************************");
 
 //        NeighbourSetGraphGenerator generator2 = new NeighbourSetGraphGenerator();
 //        generator2.generateRandomGraph(10, 0.5, new Random(42));
@@ -51,6 +53,18 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurementSet(10, 0.5);
+//        GraphGeneratorTest.parameterizedMeasurementSet(10, 0.5);
+//
+//        System.out.println("*********************************************************");
+
+        NeighbourSetGraphGenerator generator2 = new NeighbourSetGraphGenerator();
+        generator2.generateRandomGraph(10, 0.5, new Random(42));
+        System.out.println(generator2.neighbours);
+        System.out.println(generator2.weights);
+
+        System.out.println("*********************************************************");
+
+        ConstantDegreeGraph constantDegreeGraph = new ConstantDegreeGraph();
+        constantDegreeGraph.transformGraph(generator2);
     }
 }

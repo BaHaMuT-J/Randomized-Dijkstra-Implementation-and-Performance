@@ -41,6 +41,7 @@ public class PerformanceTest {
         averageShortestPathTime /= (double)repeats;
 
         Arrays.sort(times);
+//        System.out.println("sorted times: " + Arrays.toString(times));
 
         double averageShortestPathWithoutExrtremes = 0.0;
         for (int i = skipLow; i < repeats - skipHigh; ++i) {
