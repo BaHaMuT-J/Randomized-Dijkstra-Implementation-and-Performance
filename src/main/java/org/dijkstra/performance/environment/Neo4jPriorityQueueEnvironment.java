@@ -8,7 +8,7 @@ import org.dijkstra.performance.PerformanceEnvironment;
 
 import java.util.Random;
 
-public class Neo4PriorityQueueEnvironment implements PerformanceEnvironment {
+public class Neo4jPriorityQueueEnvironment implements PerformanceEnvironment {
 
 	NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 
@@ -21,7 +21,7 @@ public class Neo4PriorityQueueEnvironment implements PerformanceEnvironment {
 	double p;
 	int previousArrayBuilds;
 
-	public Neo4PriorityQueueEnvironment(int size, double p, int previousArrayBuilds, Random random) {
+	public Neo4jPriorityQueueEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;

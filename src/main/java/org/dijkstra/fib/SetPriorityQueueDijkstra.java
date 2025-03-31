@@ -4,10 +4,12 @@ import org.dijkstra.fib.wrapper.PriorityObject;
 import org.dijkstra.fib.wrapper.PriorityQueue;
 
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
-public class PriorityQueueDijkstra {
+public class SetPriorityQueueDijkstra {
 	
-	public static void createPreviousArray(int[][] neighbours, int[][] weights, int source, int[] previous, PriorityObject[] priorityObjectArray, PriorityQueue<PriorityObject> priorityQueue) {
+	public static void createPreviousArray(Map<Integer, Set<Integer>> neighbours, Map<Integer, Map<Integer, Integer>> weights, int source, int[] previous, PriorityObject[] priorityObjectArray, PriorityQueue<PriorityObject> priorityQueue) {
 		
 		for (int i = 0; i < priorityObjectArray.length; ++i) {
 			priorityObjectArray[i].priority = Integer.MAX_VALUE;
@@ -28,15 +30,17 @@ public class PriorityQueueDijkstra {
 			int u = min.node;
 			
 			// find the neighbours
-			if (neighbours[u] == null) {
+			Set<Integer> neighboursU = neighbours.get(u);
+			if (neighboursU.isEmpty()) {
 				continue;
 			}
 						
-			for (int i = 0; i < neighbours[u].length; ++i) {
-				int alt = priorityObjectArray[u].priority + weights[u][i];
-				if (alt < priorityObjectArray[neighbours[u][i]].priority) {
-					priorityQueue.decreasePriority(priorityObjectArray[neighbours[u][i]], alt);
-					previous[neighbours[u][i]] = u;
+			for (Integer neighbour : neighboursU) {
+				Map<Integer, Integer> weightsU = weights.get(u);
+				int alt = priorityObjectArray[u].priority + weightsU.get(neighbour);
+				if (alt < priorityObjectArray[neighbour].priority) {
+					priorityQueue.decreasePriority(priorityObjectArray[neighbour], alt);
+					previous[neighbour] = u;
 				}
 			}
 		}

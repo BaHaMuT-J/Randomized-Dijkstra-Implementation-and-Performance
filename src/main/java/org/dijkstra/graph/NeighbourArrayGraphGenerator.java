@@ -98,7 +98,7 @@ public class NeighbourArrayGraphGenerator {
 		int size = neighboursList.length;
 		for (int i = 0; i < size; ++i) {
 			for (int j = i+1; j < size; ++j) {
-				if (random.nextDouble() > p || neighboursList[i].contains(j) || neighboursList[j].contains(i)) {
+				if (neighboursList[i].contains(j) || neighboursList[j].contains(i) || random.nextDouble() > p) {
 					continue;
 				}
 
