@@ -40,14 +40,8 @@ public class ConstantFibonacciHeapDijkstra {
 			// extract min
 			FibonacciObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
-			
-			// find the neighbours
-			Set<CycleNode> neighboursU = neighbours.get(u);
-			if (neighboursU.isEmpty()) {
-				continue;
-			}
 						
-			for (CycleNode neighbour : neighboursU) {
+			for (CycleNode neighbour : neighbours.get(u)) {
 				Map<CycleNode, Integer> weightsU = weights.get(u);
 				int alt = fibonacciObjectMap.get(u).distance + weightsU.get(neighbour);
 				if (alt < fibonacciObjectMap.get(neighbour).distance) {

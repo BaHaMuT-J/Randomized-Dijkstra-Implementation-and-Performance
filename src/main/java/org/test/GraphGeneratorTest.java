@@ -44,14 +44,14 @@ public class GraphGeneratorTest {
         ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
         double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
 
-        System.out.println("*********************************************************");
-
-        // Test previous map
-        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
-        Collections.sort(sortedList);
-        for (CycleNode cycleNode : sortedList) {
-            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
-        }
+//        System.out.println("*********************************************************");
+//
+//        // Test previous map
+//        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
+//        Collections.sort(sortedList);
+//        for (CycleNode cycleNode : sortedList) {
+//            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
+//        }
     }
 
     private static void parameterizedMeasurementConstantDegreeRandomized(int size, double p) {
@@ -59,19 +59,23 @@ public class GraphGeneratorTest {
 
         Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
         ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
-//        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
+        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
 
-        System.out.println("*********************************************************");
-
-        // Test previous map
-        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
-        Collections.sort(sortedList);
-        for (CycleNode cycleNode : sortedList) {
-            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
-        }
+//        System.out.println("*********************************************************");
+//
+//        // Test previous map
+//        List<CycleNode> sortedList = new ArrayList<>(previousConstantDegreeMap.keySet());
+//        Collections.sort(sortedList);
+//        for (CycleNode cycleNode : sortedList) {
+//            System.out.println(cycleNode + " " + previousConstantDegreeMap.get(cycleNode));
+//        }
     }
 
     public static void main(String[] args) {
+        int size = 20;
+        double p = 0.5;
+        System.out.println("size : " + size + " | p : " + p);
+
 //        NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 //        generator.generateRandomGraph(10, 0.5, new Random(42));
 //        System.out.println(Arrays.deepToString(generator.neighbours));
@@ -101,10 +105,10 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurementConstantDegree(10, 0.5);
+        GraphGeneratorTest.parameterizedMeasurementConstantDegree(size, p);
 
         System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurementConstantDegreeRandomized(10, 0.5);
+        GraphGeneratorTest.parameterizedMeasurementConstantDegreeRandomized(size, p);
     }
 }

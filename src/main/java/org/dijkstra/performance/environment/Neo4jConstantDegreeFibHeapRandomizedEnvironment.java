@@ -80,8 +80,8 @@ public class Neo4jConstantDegreeFibHeapRandomizedEnvironment implements Constant
 		previous = new HashMap<>();
 		generator.generateRandomGraph(size, p, random);
 
-		System.out.println(generator.neighbours);
-		System.out.println(generator.weights);
+//		System.out.println(generator.neighbours);
+//		System.out.println(generator.weights);
 
 		constantDegreeGraph.transformGraph(generator);
 

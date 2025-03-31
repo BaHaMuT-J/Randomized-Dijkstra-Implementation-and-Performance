@@ -71,10 +71,10 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 				relax(u, v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				Set<CycleNode> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (CycleNode y : ball_v) {
+					if (y == v) continue;
 					int newDistance = d.get(y) + dist_v.get(y);
 					relax(y, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				}
-				ball_v.add(v);
 				for (CycleNode z2 : ball_v) {
 					for (CycleNode z1 : neighbours.get(z2)) {
 						int w_z1_z2 = weights.get(z1).get(z2);
@@ -82,7 +82,6 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 						relax(z2, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					}
 				}
-				ball_v.remove(v);
 			}
 
 			for (CycleNode x : Bundle.get(u)) {
@@ -169,13 +168,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			CycleNode u = min.node;
 			shortestDist.put(u, min.distance);
 
-			// find the neighbours
-			Set<CycleNode> neighboursU = neighbours.get(u);
-			if (neighboursU.isEmpty()) {
-				continue;
-			}
-
-			for (CycleNode neighbour : neighboursU) {
+			for (CycleNode neighbour : neighbours.get(u)) {
 				Map<CycleNode, Integer> weightsU = weights.get(u);
 				int alt = fibonacciObjectMap.get(u).distance + weightsU.get(neighbour);
 				if (alt < fibonacciObjectMap.get(neighbour).distance) {
@@ -190,10 +183,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 			}
 		}
 
-		Set<CycleNode> ball = new HashSet<>(shortestDist.keySet());
-		ball.remove(bundle);
-
-		return Map.entry(Map.entry(ball, bundle), shortestDist);
+		return Map.entry(Map.entry(shortestDist.keySet(), bundle), shortestDist);
 	}
 
 	public static void formBundleAndBall(Set<CycleNode> nodes,
