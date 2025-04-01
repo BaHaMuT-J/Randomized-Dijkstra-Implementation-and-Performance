@@ -69,7 +69,7 @@ public class GraphGeneratorTest {
     }
 
     public static void main(String[] args) {
-        int size = 20;
+        int size = 50;
         double p = 0.5;
         System.out.println("size : " + size + " | p : " + p);
 
