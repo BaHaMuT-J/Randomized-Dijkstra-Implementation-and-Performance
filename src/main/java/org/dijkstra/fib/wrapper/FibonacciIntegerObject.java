@@ -18,4 +18,9 @@ public class FibonacciIntegerObject implements Comparable<FibonacciIntegerObject
             return -1;
         }
     }
+
+    @Override
+    public String toString() {
+        return "[priority=" + priority + ", node=" + node + "]";
+    }
 }

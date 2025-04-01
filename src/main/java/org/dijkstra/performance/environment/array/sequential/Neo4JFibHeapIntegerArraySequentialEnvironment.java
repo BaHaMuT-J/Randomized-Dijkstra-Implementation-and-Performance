@@ -14,8 +14,8 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 	NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 
 	int[] previous;
-	Neo4JFibonacciIntegerObject[] priorityObjectArray;
-	Neo4JFibHeapInteger priorityQueue;
+	Neo4JFibonacciIntegerObject[] fibObjectArray;
+	Neo4JFibHeapInteger fibonacciHeap;
 	Random random;
 
 	int size;
@@ -33,7 +33,7 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
 			int origin = random.nextInt(size);
-			FibHeapIntegerArraySequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, priorityObjectArray, priorityQueue);
+			FibHeapIntegerArraySequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
 		}
 	}
 	
@@ -41,10 +41,10 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 	public void generateGraph() {
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
-		priorityQueue = new Neo4JFibHeapInteger();
-		priorityObjectArray = new Neo4JFibonacciIntegerObject[size];
+		fibonacciHeap = new Neo4JFibHeapInteger();
+		fibObjectArray = new Neo4JFibonacciIntegerObject[size];
 		for (int i = 0; i < size; ++i) {
-			priorityObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
+			fibObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
 		}
 	}
 
@@ -56,15 +56,15 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 		System.out.println(Arrays.deepToString(generator.neighbours));
 		System.out.println(Arrays.deepToString(generator.weights));
 
-		priorityQueue = new Neo4JFibHeapInteger();
-		priorityObjectArray = new Neo4JFibonacciIntegerObject[size];
+		fibonacciHeap = new Neo4JFibHeapInteger();
+		fibObjectArray = new Neo4JFibonacciIntegerObject[size];
 		for (int i = 0; i < size; ++i) {
-			priorityObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
+			fibObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
 		}
 		
 		int origin = random.nextInt(size);
 		System.out.println("origin: " + origin);
-		FibHeapIntegerArraySequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, priorityObjectArray, priorityQueue);
+		FibHeapIntegerArraySequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
 		
 		return previous;
 	}

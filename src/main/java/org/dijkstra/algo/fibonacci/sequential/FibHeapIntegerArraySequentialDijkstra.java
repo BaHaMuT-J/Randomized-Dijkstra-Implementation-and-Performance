@@ -3,6 +3,7 @@ package org.dijkstra.algo.fibonacci.sequential;
 import org.dijkstra.fib.wrapper.FibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.FibHeapInteger;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class FibHeapIntegerArraySequentialDijkstra {
@@ -33,7 +34,7 @@ public class FibHeapIntegerArraySequentialDijkstra {
 			}
 						
 			for (int i = 0; i < neighbours[u].length; ++i) {
-				int alt = fibonacciIntegerObjectArray[u].priority + weights[u][i];
+				int alt = fibonacciIntegerObjectArray[u].priority + weights[u][neighbours[u][i]];
 				if (alt < fibonacciIntegerObjectArray[neighbours[u][i]].priority) {
 					fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[neighbours[u][i]], alt);
 					previous[neighbours[u][i]] = u;
