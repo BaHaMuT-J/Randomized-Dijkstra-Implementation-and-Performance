@@ -51,7 +51,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 		fibonacciHeap.clear();
 		for (CycleNode node : R) {
 			FibonacciCycleNodeObject object = fibonacciObjectMap.get(node);
-			object.distance = node == source ? 0 : Integer.MAX_VALUE;
+			object.distance = Objects.equals(node, source) ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
 
 			// Add all FibonacciCycleNodeObject in FibonacciHeap

@@ -1,4 +1,4 @@
-package org.dijkstra.performance.environment.array;
+package org.dijkstra.performance.environment.array.sequential;
 
 import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerArraySequentialDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
@@ -9,7 +9,7 @@ import org.dijkstra.performance.IntegerPerformanceEnvironment;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Neo4JFibHeapIntegerArraySequentialEnvironmentInteger implements IntegerPerformanceEnvironment {
+public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPerformanceEnvironment {
 
 	NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 
@@ -22,7 +22,7 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironmentInteger implements Int
 	double p;
 	int previousArrayBuilds;
 
-	public Neo4JFibHeapIntegerArraySequentialEnvironmentInteger(int size, double p, int previousArrayBuilds, Random random) {
+	public Neo4JFibHeapIntegerArraySequentialEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;

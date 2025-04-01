@@ -42,7 +42,7 @@ public class DijkstraPerformanceFibHeapCycleNode {
 	}
 
 	private void writeToCSV(double[] data) {
-        String CSV_FILE = "src/main/java/org/test/result/Fibonacci_Constant.csv";
+        String CSV_FILE = "src/main/java/org/test/result/Fibonacci_CycleNode.csv";
         try (PrintWriter writer = new PrintWriter(new FileWriter(CSV_FILE, true))) {
 			writer.printf("%d,%.5f,%.5f,%.5f%n", (int) data[0], data[1], data[2], data[3]);
 		} catch (IOException e) {

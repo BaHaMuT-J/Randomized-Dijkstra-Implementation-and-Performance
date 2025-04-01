@@ -78,8 +78,8 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 		previous = new HashMap<>();
 		generator.generateRandomGraph(size, p, random);
 
-//		System.out.println(generator.neighbours);
-//		System.out.println(generator.weights);
+		System.out.println(generator.neighbours);
+		System.out.println(generator.weights);
 
 		constantDegreeGraph.transformGraph(generator);
 
@@ -93,10 +93,11 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 		int randomIndex = random.nextInt(constantDegreeGraph.nodes.size());
 		Iterator<CycleNode> iterator = constantDegreeGraph.nodes.iterator();
 		CycleNode origin = null;
-		for (int i = 0; i <= randomIndex; i++) {
-			origin = iterator.next();
-		}
+//		for (int i = 0; i <= randomIndex; i++) {
+//			origin = iterator.next();
+//		}
 
+		origin = new CycleNode(7, 4);
 		System.out.println("origin: " + origin);
 		FibHeapCycleNodeSequentialDijkstra.createPreviousArray(constantDegreeGraph.nodes,
 				constantDegreeGraph.neighbours,

@@ -1,9 +1,9 @@
-package org.test.fibonacci.cycle;
+package org.test.fibonacci.set;
 
-public class FibHeapCycleNodeGraphAnalysisMain extends DijkstraPerformanceFibHeapCycleNode {
+public class FibHeapIntegerSetGraphAnalysisMain extends DijkstraPerformanceFibHeapIntegerSet {
 	
 	public static void main(String[] args) {
-		new FibHeapCycleNodeGraphAnalysisMain().run();
+		new FibHeapIntegerSetGraphAnalysisMain().run();
 	}
 	
 	private void run() {
@@ -16,10 +16,10 @@ public class FibHeapCycleNodeGraphAnalysisMain extends DijkstraPerformanceFibHea
 	
 	private void runWithConstantP(double p) {
 		int n = 100;
-		
+
 		double[][] results = new double[n][];
 		for (int i = 1; i <= n; ++i) {
-			results[i-1] = parameterizedMeasurementConstantDegree(10 * i, p);
+			results[i-1] = parameterizedMeasurementIntegerSet(10 * i, p);
 		}
 //		for (int i = 0; i < n; ++i) {
 //			if (results[i] == null) {

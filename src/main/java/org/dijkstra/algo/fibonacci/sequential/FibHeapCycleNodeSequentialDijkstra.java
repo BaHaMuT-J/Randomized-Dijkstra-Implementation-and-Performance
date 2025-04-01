@@ -6,6 +6,7 @@ import org.dijkstra.node.CycleNode;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class FibHeapCycleNodeSequentialDijkstra {
@@ -21,15 +22,13 @@ public class FibHeapCycleNodeSequentialDijkstra {
 		fibonacciHeap.clear();
 		for (CycleNode node : nodes) {
 			FibonacciCycleNodeObject object = fibonacciObjectMap.get(node);
-			object.distance = node == source ? 0 : Integer.MAX_VALUE;
+			object.distance = Objects.equals(node, source) ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
-
-			// Set previous node to (-1, -1) for all nodes
-			previous.put(node, new CycleNode(-1, -1));
 
 			// Add all FibonacciCycleNodeObject in FibonacciHeap
 			fibonacciHeap.add(object);
 		}
+		previous.put(source, new CycleNode(-1, -1));
 				
 		while (fibonacciHeap.size() != 0) {
 			
@@ -40,7 +39,7 @@ public class FibHeapCycleNodeSequentialDijkstra {
 			for (CycleNode neighbour : neighbours.get(u)) {
 				Map<CycleNode, Integer> weightsU = weights.get(u);
 				int alt = fibonacciObjectMap.get(u).distance + weightsU.get(neighbour);
-				if (alt < fibonacciObjectMap.get(neighbour).distance) {
+				if (alt >= 0 && alt < fibonacciObjectMap.get(neighbour).distance) {
 					fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(neighbour), alt);
 					previous.put(neighbour, u);
 				}
