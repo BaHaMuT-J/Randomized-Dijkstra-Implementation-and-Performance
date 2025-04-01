@@ -25,6 +25,9 @@ public class ConstantDegreePerformanceTest {
             graphGenerationTimes[i] = System.nanoTime();
             environment.runShortestPath();
             endTimes[i] = System.nanoTime();
+            if (printOutInnerResults) {
+                System.out.println("" + i + ". run: " + startTimes[i] + "," + graphGenerationTimes[i] + "," + endTimes[i] + "->" + (endTimes[i] - graphGenerationTimes[i])/1000000.0);
+            }
         }
 
         double[] times = new double[repeats];
@@ -34,9 +37,9 @@ public class ConstantDegreePerformanceTest {
             double time = (endTimes[i] - graphGenerationTimes[i])/1000000.0;
             averageShortestPathTime += time;
             times[i] = time;
-            if (printOutInnerResults) {
-                System.out.println("" + i + ". run: " + startTimes[i] + "," + graphGenerationTimes[i] + "," + endTimes[i] + "->" + (endTimes[i] - graphGenerationTimes[i])/1000000.0);
-            }
+//            if (printOutInnerResults) {
+//                System.out.println("" + i + ". run: " + startTimes[i] + "," + graphGenerationTimes[i] + "," + endTimes[i] + "->" + (endTimes[i] - graphGenerationTimes[i])/1000000.0);
+//            }
         }
         averageShortestPathTime /= (double)repeats;
 

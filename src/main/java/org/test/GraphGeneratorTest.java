@@ -37,9 +37,9 @@ public class GraphGeneratorTest {
     private static void parameterizedMeasurementConstantDegree(int size, double p) {
         ConstantDegreePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jConstantDegreeFibHeapEnvironment(size, p, 20, new Random(42));
 
-        Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
+//        Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
         ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
-        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
+        double mConstantDegree = constantDegreeTest.measurement(20, true, true, 3, 3);
 
 //        System.out.println("*********************************************************");
 //
@@ -55,8 +55,8 @@ public class GraphGeneratorTest {
         ConstantDegreePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jConstantDegreeFibHeapRandomizedEnvironment(size, p, 20, new Random(42));
 
         Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
-        ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
-        double mConstantDegree = constantDegreeTest.measurement(20, true, false, 3, 3);
+//        ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
+//        double mConstantDegree = constantDegreeTest.measurement(20, true, true, 3, 3);
 
 //        System.out.println("*********************************************************");
 //
@@ -69,8 +69,8 @@ public class GraphGeneratorTest {
     }
 
     public static void main(String[] args) {
-        int size = 50;
-        double p = 0.5;
+        int size = 270;
+        double p = 0.1;
         System.out.println("size : " + size + " | p : " + p);
 
 //        NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
@@ -102,7 +102,7 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-        GraphGeneratorTest.parameterizedMeasurementConstantDegree(size, p);
+//        GraphGeneratorTest.parameterizedMeasurementConstantDegree(size, p);
 
         System.out.println("*********************************************************");
 
