@@ -10,6 +10,7 @@ import java.util.*;
 public class FibHeapCycleNodeRandomizedDijkstra {
 
 	private static Map<CycleNode, CycleNode> b;
+	private static Map<CycleNode, CycleNode> firstInBallMap;
 	private static Map<CycleNode, Set<CycleNode>> Bundle;
 	private static Map<CycleNode, Set<CycleNode>> Ball;
 	private static Map<CycleNode, Integer> d;
@@ -29,15 +30,15 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 		Set<CycleNode> notR = entryR.getValue();
 
 		b = new HashMap<>();
+		firstInBallMap = new HashMap<>();
 		Bundle = new HashMap<>();
 		Ball = new HashMap<>();
 		d = new HashMap<>();
 		dist = new HashMap<>();
 
-		formBundleAndBall(nodes,
+		formBundleAndBall(
 				neighbours,
 				weights,
-				fibonacciObjectMap,
 				fibonacciHeap,
 				R,
 				notR);
@@ -71,7 +72,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 				relax(u, v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				Set<CycleNode> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (CycleNode y : ball_v) {
-					if (y == v) continue;
+					if (Objects.equals(y, v)) continue;
 					int newDistance = d.get(y) + dist_v.get(y);
 					relax(y, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				}
@@ -140,12 +141,11 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 		return Map.entry(R, notR);
 	}
 
-	private static Map.Entry<Map.Entry<Set<CycleNode>, CycleNode>, Map<CycleNode, Integer>> DijkstraStop(Set<CycleNode> nodes,
-																										 Map<CycleNode, Set<CycleNode>> neighbours,
-																										 Map<CycleNode, Map<CycleNode, Integer>> weights,
-																										 CycleNode source,
-																										 FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
-																										 Set<CycleNode> R
+	private static void DijkstraStop(Map<CycleNode, Set<CycleNode>> neighbours,
+									 Map<CycleNode, Map<CycleNode, Integer>> weights,
+									 CycleNode source,
+									 FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
+									 Set<CycleNode> R
 	) {
 		fibonacciHeap.clear();
 
@@ -157,6 +157,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 
 		Map<CycleNode, Integer> shortestDist = new HashMap<>();
 		CycleNode bundle = null;
+		boolean foundFirstInBall = false;
 
 		while (fibonacciHeap.size() != 0) {
 
@@ -164,6 +165,11 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 			shortestDist.put(u, min.distance);
+
+			if (!Objects.equals(u, source) && !foundFirstInBall) {
+				foundFirstInBall = true;
+				firstInBallMap.put(source, u);
+			}
 
 			for (CycleNode neighbour : neighbours.get(u)) {
 				Map<CycleNode, Integer> weightsU = weights.get(u);
@@ -184,13 +190,23 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 			}
 		}
 
-		return Map.entry(Map.entry(shortestDist.keySet(), bundle), shortestDist);
+		// vertex b_v = u is closet node in R from v
+		b.put(source, bundle);
+
+		// v is bundled to u
+		Set<CycleNode> bundleU = Bundle.get(bundle);
+		bundleU.add(source);
+		Bundle.put(bundle, bundleU);
+
+		// for all vertices v meet before u, they are include in Ball(v)
+		Ball.put(source, shortestDist.keySet());
+
+		// priority from vertex v to each vertex in Ball(v)
+		dist.put(source, shortestDist);
 	}
 
-	public static void formBundleAndBall(Set<CycleNode> nodes,
-										 Map<CycleNode, Set<CycleNode>> neighbours,
+	public static void formBundleAndBall(Map<CycleNode, Set<CycleNode>> neighbours,
 										 Map<CycleNode, Map<CycleNode, Integer>> weights,
-										 Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap,
 										 FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
 										 Set<CycleNode> R,
 										 Set<CycleNode> notR) {
@@ -214,35 +230,18 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 
 		for (CycleNode v : notR) {
 			// for every vertex v not in R, run Dijkstra using v as a source
-			Map.Entry<Map.Entry<Set<CycleNode>, CycleNode>, Map<CycleNode, Integer>> bigEntry = DijkstraStop(nodes,
+			DijkstraStop(
 					neighbours,
 					weights,
 					v,
 					fibonacciHeap,
 					R);
-			Map.Entry<Set<CycleNode>, CycleNode> entry = bigEntry.getKey();
-
-			// vertex u is closet node in R from v
-			CycleNode u = entry.getValue();
-			b.put(v, u);
-
-			// v is bundled to u
-			Set<CycleNode> bundle = Bundle.get(u);
-			bundle.add(v);
-			Bundle.put(u, bundle);
-
-			// for all vertices v meet before u, they are include in Ball(v)
-			Set<CycleNode> verticesReachedBeforeU = entry.getKey();
-			Ball.put(v, verticesReachedBeforeU);
-
-			// distance from vertex v to each vertex in Ball(v)
-			dist.put(v, bigEntry.getValue());
 		}
 	}
 	
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
-			return null;
+			return new int[]{-1};
 		}
 		
 		LinkedList<Integer> reversedRoute = new LinkedList<>();

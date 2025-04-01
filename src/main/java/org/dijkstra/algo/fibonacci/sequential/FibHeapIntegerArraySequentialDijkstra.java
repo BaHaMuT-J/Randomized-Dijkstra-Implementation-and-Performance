@@ -45,7 +45,7 @@ public class FibHeapIntegerArraySequentialDijkstra {
 	
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
-			return null;
+			return new int[]{-1};
 		}
 		
 		LinkedList<Integer> reversedRoute = new LinkedList<>();

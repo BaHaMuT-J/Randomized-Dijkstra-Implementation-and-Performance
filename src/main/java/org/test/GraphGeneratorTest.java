@@ -57,13 +57,13 @@ public class GraphGeneratorTest {
 //        IntegerPerformanceTest testPriorityQueueSet = new IntegerPerformanceTest(environmentNeo4jPriorityQueueSet);
 //        double mPriorityQueueSet = testPriorityQueueSet.measurement(20, true, false, 3, 3);
 
-        System.out.println(Arrays.toString(pPriorityQueueSet));
+//        System.out.println(Arrays.toString(pPriorityQueueSet));
 
-        int[][] previous = new int[pPriorityQueueSet.length][];
-        for (int i = 0; i < pPriorityQueueSet.length; i++) {
-            previous[i] = FibHeapIntegerSetSequentialDijkstra.shortestPath(pPriorityQueueSet, i);
-        }
-        System.out.println(Arrays.deepToString(previous));
+//        int[][] previous = new int[pPriorityQueueSet.length][];
+//        for (int i = 0; i < pPriorityQueueSet.length; i++) {
+//            previous[i] = FibHeapIntegerSetSequentialDijkstra.shortestPath(pPriorityQueueSet, i);
+//        }
+//        System.out.println(Arrays.deepToString(previous));
     }
 
     private static void parameterizedMeasurementIntegerSetRandomized(int size, double p) {
@@ -73,13 +73,13 @@ public class GraphGeneratorTest {
 //        IntegerPerformanceTest testPriorityQueueSet = new IntegerPerformanceTest(environmentNeo4jPriorityQueueSet);
 //        double mPriorityQueueSet = testPriorityQueueSet.measurement(20, true, false, 3, 3);
 
-        System.out.println(Arrays.toString(pPriorityQueueSet));
+//        System.out.println(Arrays.toString(pPriorityQueueSet));
 
-        int[][] previous = new int[pPriorityQueueSet.length][];
-        for (int i = 0; i < pPriorityQueueSet.length; i++) {
-            previous[i] = FibHeapIntegerSetRandomizedDijkstra.shortestPath(pPriorityQueueSet, i);
-        }
-        System.out.println(Arrays.deepToString(previous));
+//        int[][] previous = new int[pPriorityQueueSet.length][];
+//        for (int i = 0; i < pPriorityQueueSet.length; i++) {
+//            previous[i] = FibHeapIntegerSetRandomizedDijkstra.shortestPath(pPriorityQueueSet, i);
+//        }
+//        System.out.println(Arrays.deepToString(previous));
     }
 
     private static void parameterizedMeasurementCycleNodeSequential(int size, double p) {
@@ -117,25 +117,25 @@ public class GraphGeneratorTest {
     }
 
     public static void main(String[] args) {
-        int size = 10;
+        int size = 100;
         double p = 0.5;
         System.out.println("size : " + size + " | p : " + p);
 
-        GraphGeneratorTest.parameterizedMeasurementIntegerArraySequential(10, 0.5);
-
-        System.out.println("*********************************************************");
-
-        GraphGeneratorTest.parameterizedMeasurementIntegerArrayRandomized(10, 0.5);
-
-        System.out.println("*********************************************************");
-
-//        GraphGeneratorTest.parameterizedMeasurementIntegerSetSequential(10, 0.5);
+//        GraphGeneratorTest.parameterizedMeasurementIntegerArraySequential(size, p);
 //
 //        System.out.println("*********************************************************");
 //
-//        GraphGeneratorTest.parameterizedMeasurementIntegerSetRandomized(10, 0.5);
+//        GraphGeneratorTest.parameterizedMeasurementIntegerArrayRandomized(size, p);
 //
 //        System.out.println("*********************************************************");
+
+//        GraphGeneratorTest.parameterizedMeasurementIntegerSetSequential(size, p);
+//
+//        System.out.println("*********************************************************");
+
+        GraphGeneratorTest.parameterizedMeasurementIntegerSetRandomized(size, p);
+
+        System.out.println("*********************************************************");
 
 //        GraphGeneratorTest.parameterizedMeasurementCycleNodeSequential(size, p);
 //

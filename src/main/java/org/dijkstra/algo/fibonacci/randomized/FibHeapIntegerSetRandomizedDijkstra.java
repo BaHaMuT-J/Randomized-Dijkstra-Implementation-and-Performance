@@ -9,6 +9,7 @@ import java.util.*;
 public class FibHeapIntegerSetRandomizedDijkstra {
 
 	private static Map<Integer, Integer> b;
+	private static Map<Integer, Integer> firstInBallMap;
 	private static Map<Integer, Set<Integer>> Bundle;
 	private static Map<Integer, Set<Integer>> Ball;
 	private static Map<Integer, Integer> d;
@@ -28,6 +29,7 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		Set<Integer> notR = entryR.getValue();
 
 		b = new HashMap<>();
+		firstInBallMap = new HashMap<>();
 		Bundle = new HashMap<>();
 		Ball = new HashMap<>();
 		d = new HashMap<>();
@@ -36,7 +38,6 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		formBundleAndBall(nodes,
 				neighbours,
 				weights,
-				fibonacciIntegerObjectArray,
 				fibHeapInteger,
 				R,
 				notR);
@@ -57,6 +58,12 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 			fibHeapInteger.add(object);
 		}
 
+//		System.out.printf("R: %s\n", R);
+//		System.out.printf("notR: %s\n", notR);
+//		System.out.printf("Bundle: %s\n", Bundle);
+//		System.out.printf("Ball: %s\n", Ball);
+//		System.out.printf("dist: %s\n", dist);
+
 		Set<Integer> extractedNodes = new HashSet<>();
 		while (fibHeapInteger.size() != 0) {
 
@@ -67,7 +74,7 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 
 			for (Integer v : Bundle.get(u)) {
 				Map<Integer, Integer> dist_v = dist.get(v);
-				relax(u, v, min.priority + dist_v.get(u), R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+				relax(firstInBallMap.get(v), v, min.priority + dist_v.get(u), R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				Set<Integer> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (Integer y : ball_v) {
 					if (Objects.equals(y, v)) continue;
@@ -94,6 +101,8 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 					}
 				}
 			}
+
+//			System.out.printf("d: %s\n", d);
 		}
 	}
 
@@ -139,12 +148,12 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		return Map.entry(R, notR);
 	}
 
-	private static Map.Entry<Map.Entry<Set<Integer>, Integer>, Map<Integer, Integer>> DijkstraStop(Set<Integer> nodes,
-																										 Map<Integer, Set<Integer>> neighbours,
-																										 Map<Integer, Map<Integer, Integer>> weights,
-																										 Integer source,
-																										 FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
-																										 Set<Integer> R
+	private static void DijkstraStop(Set<Integer> nodes,
+									 Map<Integer, Set<Integer>> neighbours,
+									 Map<Integer, Map<Integer, Integer>> weights,
+									 Integer source,
+									 FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
+									 Set<Integer> R
 	) {
 		fibHeapInteger.clear();
 
@@ -156,6 +165,7 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 
 		Map<Integer, Integer> shortestDist = new HashMap<>();
 		Integer bundle = null;
+		boolean foundFirstInBall = false;
 
 		while (fibHeapInteger.size() != 0) {
 
@@ -163,6 +173,11 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 			FibonacciIntegerObject min = fibHeapInteger.extractMin();
 			Integer u = min.node;
 			shortestDist.put(u, min.priority);
+
+			if (!Objects.equals(u, source) && !foundFirstInBall) {
+				foundFirstInBall = true;
+				firstInBallMap.put(source, u);
+			}
 
 			for (Integer neighbour : neighbours.get(u)) {
 				Map<Integer, Integer> weightsU = weights.get(u);
@@ -183,13 +198,24 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 			}
 		}
 
-		return Map.entry(Map.entry(shortestDist.keySet(), bundle), shortestDist);
+		// vertex b_v = u is closet node in R from v
+		b.put(source, bundle);
+
+		// v is bundled to u
+		Set<Integer> bundleU = Bundle.get(bundle);
+		bundleU.add(source);
+		Bundle.put(bundle, bundleU);
+
+		// for all vertices v meet before u, they are include in Ball(v)
+		Ball.put(source, shortestDist.keySet());
+
+		// priority from vertex v to each vertex in Ball(v)
+		dist.put(source, shortestDist);
 	}
 
 	public static void formBundleAndBall(Set<Integer> nodes,
 										 Map<Integer, Set<Integer>> neighbours,
 										 Map<Integer, Map<Integer, Integer>> weights,
-										 FibonacciIntegerObject[] fibonacciIntegerObjectArray,
 										 FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
 										 Set<Integer> R,
 										 Set<Integer> notR) {
@@ -213,35 +239,18 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 
 		for (Integer v : notR) {
 			// for every vertex v not in R, run Dijkstra using v as a source
-			Map.Entry<Map.Entry<Set<Integer>, Integer>, Map<Integer, Integer>> bigEntry = DijkstraStop(nodes,
+			DijkstraStop(nodes,
 					neighbours,
 					weights,
 					v,
 					fibHeapInteger,
 					R);
-			Map.Entry<Set<Integer>, Integer> entry = bigEntry.getKey();
-
-			// vertex u is closet node in R from v
-			Integer u = entry.getValue();
-			b.put(v, u);
-
-			// v is bundled to u
-			Set<Integer> bundle = Bundle.get(u);
-			bundle.add(v);
-			Bundle.put(u, bundle);
-
-			// for all vertices v meet before u, they are include in Ball(v)
-			Set<Integer> verticesReachedBeforeU = entry.getKey();
-			Ball.put(v, verticesReachedBeforeU);
-
-			// priority from vertex v to each vertex in Ball(v)
-			dist.put(v, bigEntry.getValue());
 		}
 	}
 	
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
-			return null;
+			return new int[]{-1};
 		}
 		
 		LinkedList<Integer> reversedRoute = new LinkedList<>();
@@ -260,10 +269,10 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		return path;
 	}
 
-	public static int pathCalculate(int[] path, int[][] weights) {
+	public static int pathCalculate(int[] path, Map<Integer, Map<Integer, Integer>> weights) {
 		int totalWeight = 0;
 		for (int i = 1; i < path.length; ++i) {
-			totalWeight += weights[path[i-1]][path[i]];
+			totalWeight += weights.get(path[i-1]).get(path[i]);
 		}
 		return totalWeight;
 	}

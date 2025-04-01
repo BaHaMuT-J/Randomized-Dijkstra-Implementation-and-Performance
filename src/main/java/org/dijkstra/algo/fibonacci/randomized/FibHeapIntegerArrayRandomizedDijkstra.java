@@ -9,6 +9,7 @@ import java.util.*;
 public class FibHeapIntegerArrayRandomizedDijkstra {
 
 	private static Map<Integer, Integer> b;
+	private static Map<Integer, Integer> firstInBallMap;
 	private static Map<Integer, Set<Integer>> Bundle;
 	private static Map<Integer, Set<Integer>> Ball;
 	private static Map<Integer, Integer> d;
@@ -28,6 +29,7 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 		Set<Integer> notR = entryR.getValue();
 
 		b = new HashMap<>();
+		firstInBallMap = new HashMap<>();
 		Bundle = new HashMap<>();
 		Ball = new HashMap<>();
 		d = new HashMap<>();
@@ -35,7 +37,6 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 
 		formBundleAndBall(neighbours,
 				weights,
-				fibonacciIntegerObjectArray,
 				fibHeapInteger,
 				R,
 				notR);
@@ -137,11 +138,11 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 		return Map.entry(R, notR);
 	}
 
-	private static Map.Entry<Map.Entry<Set<Integer>, Integer>, Map<Integer, Integer>> DijkstraStop(int[][] neighbours,
-																								   int[][] weights,
-																								   Integer source,
-																								   FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
-																								   Set<Integer> R
+	private static void DijkstraStop(int[][] neighbours,
+									 int[][] weights,
+									 Integer source,
+									 FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
+									 Set<Integer> R
 	) {
 		int n = neighbours.length;
 		fibHeapInteger.clear();
@@ -154,6 +155,7 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 
 		Map<Integer, Integer> shortestDist = new HashMap<>();
 		Integer bundle = null;
+		boolean foundFirstInBall = false;
 
 		while (fibHeapInteger.size() != 0) {
 
@@ -161,6 +163,11 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 			FibonacciIntegerObject min = fibHeapInteger.extractMin();
 			Integer u = min.node;
 			shortestDist.put(u, min.priority);
+
+			if (!Objects.equals(u, source) && !foundFirstInBall) {
+				foundFirstInBall = true;
+				firstInBallMap.put(source, u);
+			}
 
 			for (Integer neighbour : neighbours[u]) {
 				int[] weightsU = weights[u];
@@ -181,12 +188,23 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 			}
 		}
 
-		return Map.entry(Map.entry(shortestDist.keySet(), bundle), shortestDist);
+		// vertex b_v = u is closet node in R from v
+		b.put(source, bundle);
+
+		// v is bundled to u
+		Set<Integer> bundleU = Bundle.get(bundle);
+		bundleU.add(source);
+		Bundle.put(bundle, bundleU);
+
+		// for all vertices v meet before u, they are include in Ball(v)
+		Ball.put(source, shortestDist.keySet());
+
+		// priority from vertex v to each vertex in Ball(v)
+		dist.put(source, shortestDist);
 	}
 
 	public static void formBundleAndBall(int[][] neighbours,
 										 int[][] weights,
-										 FibonacciIntegerObject[] fibonacciIntegerObjectArray,
 										 FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
 										 Set<Integer> R,
 										 Set<Integer> notR) {
@@ -210,35 +228,18 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 
 		for (Integer v : notR) {
 			// for every vertex v not in R, run Dijkstra using v as a source
-			Map.Entry<Map.Entry<Set<Integer>, Integer>, Map<Integer, Integer>> bigEntry = DijkstraStop(
+			DijkstraStop(
 					neighbours,
 					weights,
 					v,
 					fibHeapInteger,
 					R);
-			Map.Entry<Set<Integer>, Integer> entry = bigEntry.getKey();
-
-			// vertex u is closet node in R from v
-			Integer u = entry.getValue();
-			b.put(v, u);
-
-			// v is bundled to u
-			Set<Integer> bundle = Bundle.get(u);
-			bundle.add(v);
-			Bundle.put(u, bundle);
-
-			// for all vertices v meet before u, they are include in Ball(v)
-			Set<Integer> verticesReachedBeforeU = entry.getKey();
-			Ball.put(v, verticesReachedBeforeU);
-
-			// priority from vertex v to each vertex in Ball(v)
-			dist.put(v, bigEntry.getValue());
 		}
 	}
 	
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
-			return null;
+			return new int[]{-1};
 		}
 		
 		LinkedList<Integer> reversedRoute = new LinkedList<>();

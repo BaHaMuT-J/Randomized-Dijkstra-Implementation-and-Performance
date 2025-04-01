@@ -48,7 +48,7 @@ public class FibHeapIntegerSetSequentialDijkstra {
 	
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
-			return null;
+			return new int[]{-1};
 		}
 		
 		LinkedList<Integer> reversedRoute = new LinkedList<>();
@@ -67,10 +67,10 @@ public class FibHeapIntegerSetSequentialDijkstra {
 		return path;
 	}
 
-	public static int pathCalculate(int[] path, int[][] weights) {
+	public static int pathCalculate(int[] path, Map<Integer, Map<Integer, Integer>> weights) {
 		int totalWeight = 0;
 		for (int i = 1; i < path.length; ++i) {
-			totalWeight += weights[path[i-1]][path[i]];
+			totalWeight += weights.get(path[i-1]).get(path[i]);
 		}
 		return totalWeight;
 	}

@@ -53,8 +53,8 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
 
-		System.out.println(Arrays.deepToString(generator.neighbours));
-		System.out.println(Arrays.deepToString(generator.weights));
+//		System.out.println(Arrays.deepToString(generator.neighbours));
+//		System.out.println(Arrays.deepToString(generator.weights));
 
 		fibonacciHeap = new Neo4JFibHeapInteger();
 		fibObjectArray = new Neo4JFibonacciIntegerObject[size];

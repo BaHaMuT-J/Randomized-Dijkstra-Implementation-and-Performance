@@ -1,11 +1,13 @@
 package org.dijkstra.performance.environment.set.randomized;
 
 import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerSetRandomizedDijkstra;
+import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerSetSequentialDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapInteger;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
 import org.dijkstra.graph.NeighbourSetGraphGenerator;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Neo4JFibHeapIntegerSetRandomizedEnvironment implements IntegerPerformanceEnvironment {
@@ -59,8 +61,8 @@ public class Neo4JFibHeapIntegerSetRandomizedEnvironment implements IntegerPerfo
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
 
-		System.out.println(generator.neighbours);
-		System.out.println(generator.weights);
+//		System.out.println(generator.neighbours);
+//		System.out.println(generator.weights);
 
 		fibonacciHeap = new Neo4JFibHeapInteger();
 		fibObjectArray = new Neo4JFibonacciIntegerObject[size];
