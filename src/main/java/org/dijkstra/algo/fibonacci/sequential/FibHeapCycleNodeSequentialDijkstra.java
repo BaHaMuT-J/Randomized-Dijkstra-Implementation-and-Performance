@@ -1,40 +1,40 @@
-package org.dijkstra.algo.sequential;
+package org.dijkstra.algo.fibonacci.sequential;
 
-import org.dijkstra.fib.wrapper.FibHeap;
-import org.dijkstra.fib.wrapper.FibonacciObject;
+import org.dijkstra.fib.wrapper.FibHeapCycleNode;
+import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
 import org.dijkstra.node.CycleNode;
 
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-public class ConstantFibonacciHeapDijkstra {
+public class FibHeapCycleNodeSequentialDijkstra {
 	
 	public static void createPreviousArray(Set<CycleNode> nodes,
 										   Map<CycleNode, Set<CycleNode>> neighbours,
 										   Map<CycleNode, Map<CycleNode, Integer>> weights,
 										   CycleNode source,
 										   Map<CycleNode, CycleNode> previous,
-										   Map<CycleNode, FibonacciObject> fibonacciObjectMap,
-										   FibHeap<FibonacciObject> fibonacciHeap
+										   Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap,
+										   FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap
 	) {
 		fibonacciHeap.clear();
 		for (CycleNode node : nodes) {
-			FibonacciObject object = fibonacciObjectMap.get(node);
+			FibonacciCycleNodeObject object = fibonacciObjectMap.get(node);
 			object.distance = node == source ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
 
 			// Set previous node to (-1, -1) for all nodes
 			previous.put(node, new CycleNode(-1, -1));
 
-			// Add all FibonacciObject in FibonacciHeap
+			// Add all FibonacciCycleNodeObject in FibonacciHeap
 			fibonacciHeap.add(object);
 		}
 				
 		while (fibonacciHeap.size() != 0) {
 			
 			// extract min
-			FibonacciObject min = fibonacciHeap.extractMin();
+			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 						
 			for (CycleNode neighbour : neighbours.get(u)) {

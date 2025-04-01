@@ -65,7 +65,7 @@ public class FibonacciHeap {
     }
 
     /**
-     * Creates a new <code>FibHeap</code>.
+     * Creates a new <code>FibHeapCycleNode</code>.
      */
     public FibonacciHeap() {
         this.min= null;
@@ -94,7 +94,7 @@ public class FibonacciHeap {
 
     /**
      * Returns <code>true</code> if <code>item</code> exists in this
-     * <code>FibHeap</code>, false otherwise.
+     * <code>FibHeapCycleNode</code>, false otherwise.
      */
     public boolean contains(Object item) {
         return itemsToNodes.containsKey(item);

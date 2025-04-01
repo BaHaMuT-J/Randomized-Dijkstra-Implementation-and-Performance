@@ -1,37 +1,37 @@
-package org.test.fibonacci.constant;
+package org.test.fibonacci.cycle;
 
-import org.dijkstra.performance.ConstantDegreePerformanceTest;
-import org.dijkstra.performance.ConstantDegreePerformanceEnvironment;
-import org.dijkstra.performance.environment.constant.Neo4jConstantDegreeFibHeapEnvironment;
-import org.dijkstra.performance.environment.constant.randomized.Neo4jConstantDegreeFibHeapRandomizedEnvironment;
+import org.dijkstra.performance.CycleNodePerformanceTest;
+import org.dijkstra.performance.CycleNodePerformanceEnvironment;
+import org.dijkstra.performance.environment.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
+import org.dijkstra.performance.environment.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
 
-public class DijkstraPerformanceFibonacciConstant {
+public class DijkstraPerformanceFibHeapCycleNode {
 
     protected double[] parameterizedMeasurementConstantDegree(int size, double p) {
 		System.out.printf("size: %d, p: %f\n", size, p);
 
-		ConstantDegreePerformanceEnvironment environmentSequentialConstant = new Neo4jConstantDegreeFibHeapEnvironment(
+		CycleNodePerformanceEnvironment environmentSequentialConstant = new Neo4jFibHeapCycleNodeSequentialEnvironment(
 				size,
 				p,
 				1,
 				new Random(42));
 
-		ConstantDegreePerformanceEnvironment environmentRandomConstant = new Neo4jConstantDegreeFibHeapRandomizedEnvironment(
+		CycleNodePerformanceEnvironment environmentRandomConstant = new Neo4jFibHeapCycleNodeRandomizedEnvironment(
 				size,
 				p,
 				1,
 				new Random(42)
 		);
 
-		ConstantDegreePerformanceTest testSequential = new ConstantDegreePerformanceTest(environmentSequentialConstant);
+		CycleNodePerformanceTest testSequential = new CycleNodePerformanceTest(environmentSequentialConstant);
 		double mSequential = testSequential.measurement(20, true, false, 3, 3);
 
-		ConstantDegreePerformanceTest testRandomConstant = new ConstantDegreePerformanceTest(environmentRandomConstant);
+		CycleNodePerformanceTest testRandomConstant = new CycleNodePerformanceTest(environmentRandomConstant);
 		double mRandom = testRandomConstant.measurement(20, true, false, 3, 3);
 
 		double[] result = new double[]{ size, p, mSequential, mRandom };

@@ -2,16 +2,16 @@ package org.dijkstra.performance;
 
 import java.util.Arrays;
 
-public class ConstantDegreePerformanceTest {
+public class IntegerPerformanceTest {
 
-    private final ConstantDegreePerformanceEnvironment environment;
+    private final IntegerPerformanceEnvironment scenario;
 
     public long[] startTimes;
     public long[] graphGenerationTimes;
     public long[] endTimes;
 
-    public ConstantDegreePerformanceTest(ConstantDegreePerformanceEnvironment environment) {
-        this.environment = environment;
+    public IntegerPerformanceTest(IntegerPerformanceEnvironment scenario) {
+        this.scenario = scenario;
     }
 
     public double measurement(int repeats, boolean printAverageTimes, boolean printOutInnerResults, int skipLow, int skipHigh) {
@@ -21,9 +21,9 @@ public class ConstantDegreePerformanceTest {
 
         for (int i = 0; i < repeats; ++i) {
             startTimes[i] = System.nanoTime();
-            environment.generateGraph();
+            scenario.generateGraph();
             graphGenerationTimes[i] = System.nanoTime();
-            environment.runShortestPath();
+            scenario.runShortestPath();
             endTimes[i] = System.nanoTime();
             if (printOutInnerResults) {
                 System.out.println("" + i + ". run: " + startTimes[i] + "," + graphGenerationTimes[i] + "," + endTimes[i] + "->" + (endTimes[i] - graphGenerationTimes[i])/1000000.0);

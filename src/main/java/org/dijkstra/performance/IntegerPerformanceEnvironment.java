@@ -1,6 +1,6 @@
 package org.dijkstra.performance;
 
-public interface PerformanceEnvironment {
+public interface IntegerPerformanceEnvironment {
     public void generateGraph();
     public void runShortestPath();
     public int[] testPrevious(int randomSeed);

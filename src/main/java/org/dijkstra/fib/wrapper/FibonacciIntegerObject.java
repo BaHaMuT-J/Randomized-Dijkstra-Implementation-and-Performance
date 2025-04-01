@@ -1,17 +1,17 @@
 package org.dijkstra.fib.wrapper;
 
-public class PriorityObject implements Comparable<PriorityObject> {
+public class FibonacciIntegerObject implements Comparable<FibonacciIntegerObject> {
 
     public int priority;
     public int node;
 
-    public PriorityObject(int node, int priority) {
+    public FibonacciIntegerObject(int node, int priority) {
         this.node = node;
         this.priority = priority;
     }
 
     @Override
-    public int compareTo(PriorityObject o) {
+    public int compareTo(FibonacciIntegerObject o) {
         if (priority > o.priority) {
             return +1;
         } else {

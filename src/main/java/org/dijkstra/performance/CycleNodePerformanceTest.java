@@ -2,16 +2,16 @@ package org.dijkstra.performance;
 
 import java.util.Arrays;
 
-public class PerformanceTest {
+public class CycleNodePerformanceTest {
 
-    private final PerformanceEnvironment scenario;
+    private final CycleNodePerformanceEnvironment environment;
 
     public long[] startTimes;
     public long[] graphGenerationTimes;
     public long[] endTimes;
 
-    public PerformanceTest(PerformanceEnvironment scenario) {
-        this.scenario = scenario;
+    public CycleNodePerformanceTest(CycleNodePerformanceEnvironment environment) {
+        this.environment = environment;
     }
 
     public double measurement(int repeats, boolean printAverageTimes, boolean printOutInnerResults, int skipLow, int skipHigh) {
@@ -21,9 +21,9 @@ public class PerformanceTest {
 
         for (int i = 0; i < repeats; ++i) {
             startTimes[i] = System.nanoTime();
-            scenario.generateGraph();
+            environment.generateGraph();
             graphGenerationTimes[i] = System.nanoTime();
-            scenario.runShortestPath();
+            environment.runShortestPath();
             endTimes[i] = System.nanoTime();
             if (printOutInnerResults) {
                 System.out.println("" + i + ". run: " + startTimes[i] + "," + graphGenerationTimes[i] + "," + endTimes[i] + "->" + (endTimes[i] - graphGenerationTimes[i])/1000000.0);

@@ -3,20 +3,20 @@ package org.dijkstra.fib.wrapper;
 import org.dijkstra.node.CycleNode;
 
 /**
- * Customize object going into FibHeap for Dijkstra
+ * Customize object going into FibHeapCycleNode for Dijkstra
  */
-public class FibonacciObject implements Comparable<FibonacciObject> {
+public class FibonacciCycleNodeObject implements Comparable<FibonacciCycleNodeObject> {
 
     public int distance; // distance from source to this vertex
     public CycleNode node; // vertex name (u_v)
 
-    public FibonacciObject(CycleNode node, int distance) {
+    public FibonacciCycleNodeObject(CycleNode node, int distance) {
         this.node = node;
         this.distance = distance;
     }
 
     @Override
-    public int compareTo(FibonacciObject other) {
+    public int compareTo(FibonacciCycleNodeObject other) {
         if (distance > other.distance) {
             return +1;
         } else {

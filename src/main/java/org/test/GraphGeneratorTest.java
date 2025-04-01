@@ -1,44 +1,44 @@
 package org.test;
 
 import org.dijkstra.node.CycleNode;
-import org.dijkstra.performance.ConstantDegreePerformanceEnvironment;
-import org.dijkstra.performance.ConstantDegreePerformanceTest;
-import org.dijkstra.performance.PerformanceEnvironment;
-import org.dijkstra.performance.PerformanceTest;
-import org.dijkstra.performance.environment.constant.Neo4jConstantDegreeFibHeapEnvironment;
-import org.dijkstra.performance.environment.constant.randomized.Neo4jConstantDegreeFibHeapRandomizedEnvironment;
-import org.dijkstra.performance.environment.array.Neo4jPriorityQueueEnvironment;
-import org.dijkstra.performance.environment.set.Neo4jSetPriorityQueueEnvironment;
+import org.dijkstra.performance.CycleNodePerformanceEnvironment;
+import org.dijkstra.performance.CycleNodePerformanceTest;
+import org.dijkstra.performance.IntegerPerformanceEnvironment;
+import org.dijkstra.performance.IntegerPerformanceTest;
+import org.dijkstra.performance.environment.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
+import org.dijkstra.performance.environment.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
+import org.dijkstra.performance.environment.array.Neo4JFibHeapIntegerArraySequentialEnvironmentInteger;
+import org.dijkstra.performance.environment.set.Neo4JFibHeapIntegerSetSequentialEnvironmentInteger;
 
 import java.util.*;
 
 public class GraphGeneratorTest {
 
     private static void parameterizedMeasurement(int size, double p) {
-        PerformanceEnvironment environmentNeo4jPriorityQueue = new Neo4jPriorityQueueEnvironment(size, p, 20, new Random(42));
+        IntegerPerformanceEnvironment environmentNeo4jPriorityQueue = new Neo4JFibHeapIntegerArraySequentialEnvironmentInteger(size, p, 20, new Random(42));
 
         int[] pPriorityQueue = environmentNeo4jPriorityQueue.testPrevious(42);
-        PerformanceTest testPriorityQueue = new PerformanceTest(environmentNeo4jPriorityQueue);
+        IntegerPerformanceTest testPriorityQueue = new IntegerPerformanceTest(environmentNeo4jPriorityQueue);
         double mPriorityQueue = testPriorityQueue.measurement(20, true, false, 3, 3);
 
         System.out.println(Arrays.toString(pPriorityQueue));
     }
 
     private static void parameterizedMeasurementSet(int size, double p) {
-        PerformanceEnvironment environmentNeo4jPriorityQueueSet = new Neo4jSetPriorityQueueEnvironment(size, p, 20, new Random(42));
+        IntegerPerformanceEnvironment environmentNeo4jPriorityQueueSet = new Neo4JFibHeapIntegerSetSequentialEnvironmentInteger(size, p, 20, new Random(42));
 
         int[] pPriorityQueueSet = environmentNeo4jPriorityQueueSet.testPrevious(42);
-        PerformanceTest testPriorityQueueSet = new PerformanceTest(environmentNeo4jPriorityQueueSet);
+        IntegerPerformanceTest testPriorityQueueSet = new IntegerPerformanceTest(environmentNeo4jPriorityQueueSet);
         double mPriorityQueueSet = testPriorityQueueSet.measurement(20, true, false, 3, 3);
 
         System.out.println(Arrays.toString(pPriorityQueueSet));
     }
 
     private static void parameterizedMeasurementConstantDegree(int size, double p) {
-        ConstantDegreePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jConstantDegreeFibHeapEnvironment(size, p, 20, new Random(42));
+        CycleNodePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jFibHeapCycleNodeSequentialEnvironment(size, p, 20, new Random(42));
 
 //        Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
-        ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
+        CycleNodePerformanceTest constantDegreeTest = new CycleNodePerformanceTest(environmentNeo4jFibHeapConstant);
         double mConstantDegree = constantDegreeTest.measurement(20, true, true, 3, 3);
 
 //        System.out.println("*********************************************************");
@@ -52,10 +52,10 @@ public class GraphGeneratorTest {
     }
 
     private static void parameterizedMeasurementConstantDegreeRandomized(int size, double p) {
-        ConstantDegreePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jConstantDegreeFibHeapRandomizedEnvironment(size, p, 20, new Random(42));
+        CycleNodePerformanceEnvironment environmentNeo4jFibHeapConstant = new Neo4jFibHeapCycleNodeRandomizedEnvironment(size, p, 20, new Random(42));
 
         Map<CycleNode, CycleNode> previousConstantDegreeMap = environmentNeo4jFibHeapConstant.testPrevious(42);
-//        ConstantDegreePerformanceTest constantDegreeTest = new ConstantDegreePerformanceTest(environmentNeo4jFibHeapConstant);
+//        CycleNodePerformanceTest constantDegreeTest = new CycleNodePerformanceTest(environmentNeo4jFibHeapConstant);
 //        double mConstantDegree = constantDegreeTest.measurement(20, true, true, 3, 3);
 
 //        System.out.println("*********************************************************");

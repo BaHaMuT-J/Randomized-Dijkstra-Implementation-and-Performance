@@ -1,13 +1,13 @@
-package org.dijkstra.algo.randomized;
+package org.dijkstra.algo.fibonacci.randomized;
 
-import org.dijkstra.fib.wrapper.FibHeap;
-import org.dijkstra.fib.wrapper.FibonacciObject;
-import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciObject;
+import org.dijkstra.fib.wrapper.FibHeapCycleNode;
+import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
+import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciCycleNodeObject;
 import org.dijkstra.node.CycleNode;
 
 import java.util.*;
 
-public class RandomizedConstantFibonacciHeapDijkstra {
+public class FibHeapCycleNodeRandomizedDijkstra {
 
 	private static Map<CycleNode, CycleNode> b;
 	private static Map<CycleNode, Set<CycleNode>> Bundle;
@@ -20,8 +20,8 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 										   Map<CycleNode, Map<CycleNode, Integer>> weights,
 										   CycleNode source,
 										   Map<CycleNode, CycleNode> previous,
-										   Map<CycleNode, FibonacciObject> fibonacciObjectMap,
-										   FibHeap<FibonacciObject> fibonacciHeap,
+										   Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap,
+										   FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
 										   Random random
 	) {
 		Map.Entry<Set<CycleNode>, Set<CycleNode>> entryR = getSetR(nodes, source, random);
@@ -50,11 +50,11 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 
 		fibonacciHeap.clear();
 		for (CycleNode node : R) {
-			FibonacciObject object = fibonacciObjectMap.get(node);
+			FibonacciCycleNodeObject object = fibonacciObjectMap.get(node);
 			object.distance = node == source ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
 
-			// Add all FibonacciObject in FibonacciHeap
+			// Add all FibonacciCycleNodeObject in FibonacciHeap
 			fibonacciHeap.add(object);
 		}
 
@@ -62,7 +62,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 		while (fibonacciHeap.size() != 0) {
 
 			// extract min
-			FibonacciObject min = fibonacciHeap.extractMin();
+			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 			extractedNodes.add(u);
 
@@ -103,8 +103,8 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 							  Integer alt,
 							  Set<CycleNode> R,
 							  Set<CycleNode> extractedNodes,
-							  Map<CycleNode, FibonacciObject> fibonacciObjectMap,
-							  FibHeap<FibonacciObject> fibonacciHeap,
+							  Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap,
+							  FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
 							  Map<CycleNode, CycleNode> previous) {
 		if (alt >= 0 && alt < d.get(v)) {
 			d.put(v, alt);
@@ -144,14 +144,14 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 																										 Map<CycleNode, Set<CycleNode>> neighbours,
 																										 Map<CycleNode, Map<CycleNode, Integer>> weights,
 																										 CycleNode source,
-																										 FibHeap<FibonacciObject> fibonacciHeap,
+																										 FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
 																										 Set<CycleNode> R
 	) {
 		fibonacciHeap.clear();
 
 		// Insert in fibonacciHeap when relax
-		Map<CycleNode, FibonacciObject> fibonacciObjectMap = new HashMap<>();
-		FibonacciObject sourceObject = new Neo4jFibonacciObject(source, 0);
+		Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap = new HashMap<>();
+		FibonacciCycleNodeObject sourceObject = new Neo4JFibonacciCycleNodeObject(source, 0);
 		fibonacciObjectMap.put(source, sourceObject);
 		fibonacciHeap.add(sourceObject);
 
@@ -161,7 +161,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 		while (fibonacciHeap.size() != 0) {
 
 			// extract min
-			FibonacciObject min = fibonacciHeap.extractMin();
+			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 			shortestDist.put(u, min.distance);
 
@@ -169,7 +169,7 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 				Map<CycleNode, Integer> weightsU = weights.get(u);
 				int alt = fibonacciObjectMap.get(u).distance + weightsU.get(neighbour);
 				if (!fibonacciObjectMap.containsKey(neighbour)) {
-					FibonacciObject object = new Neo4jFibonacciObject(neighbour, alt);
+					FibonacciCycleNodeObject object = new Neo4JFibonacciCycleNodeObject(neighbour, alt);
 					fibonacciObjectMap.put(neighbour, object);
 					fibonacciHeap.add(object);
 				} else if (alt < fibonacciObjectMap.get(neighbour).distance) {
@@ -190,8 +190,8 @@ public class RandomizedConstantFibonacciHeapDijkstra {
 	public static void formBundleAndBall(Set<CycleNode> nodes,
 										 Map<CycleNode, Set<CycleNode>> neighbours,
 										 Map<CycleNode, Map<CycleNode, Integer>> weights,
-										 Map<CycleNode, FibonacciObject> fibonacciObjectMap,
-										 FibHeap<FibonacciObject> fibonacciHeap,
+										 Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap,
+										 FibHeapCycleNode<FibonacciCycleNodeObject> fibonacciHeap,
 										 Set<CycleNode> R,
 										 Set<CycleNode> notR) {
 		for (CycleNode u : R) {

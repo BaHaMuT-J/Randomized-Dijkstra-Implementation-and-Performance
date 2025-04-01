@@ -1,7 +1,7 @@
 package gabormakrai.com.keithschwarz;
 
 /***********************************************************************
- * File: FibHeap.java
+ * File: FibHeapCycleNode.java
  * Author: Keith Schwarz (htiek@cs.stanford.edu)
  *
  * An implementation of a distance queue backed by a Fibonacci heap,
@@ -197,11 +197,11 @@ public final class FibonacciHeap<T> {
      *
      * @param one The first Fibonacci heap to merge.
      * @param two The second Fibonacci heap to merge.
-     * @return A new FibHeap containing all of the elements of both
+     * @return A new FibHeapCycleNode containing all of the elements of both
      *         heaps.
      */
     public static <T> FibonacciHeap<T> merge(FibonacciHeap<T> one, FibonacciHeap<T> two) {
-        /* Create a new FibHeap to hold the result. */
+        /* Create a new FibHeapCycleNode to hold the result. */
         FibonacciHeap<T> result = new FibonacciHeap<T>();
 
         /* Merge the two Fibonacci heap root lists together.  This helper function
