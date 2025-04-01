@@ -1,6 +1,6 @@
-package org.dijkstra.performance.environment;
+package org.dijkstra.performance.environment.array;
 
-import org.dijkstra.fib.PriorityQueueDijkstra;
+import org.dijkstra.algo.sequential.PriorityQueueDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4jPriorityObject;
 import org.dijkstra.fib.wrapper.heap.Neo4jPriorityQueue;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;

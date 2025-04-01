@@ -1,6 +1,5 @@
-package org.dijkstra.fib;
+package org.dijkstra.algo.randomized;
 
-import fail.dijktra.RandomizedDijkstra;
 import org.dijkstra.fib.wrapper.FibHeap;
 import org.dijkstra.fib.wrapper.FibonacciObject;
 import org.dijkstra.node.CycleNode;

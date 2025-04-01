@@ -1,17 +1,14 @@
 package org.test;
 
-import org.dijkstra.graph.ConstantDegreeGraph;
-import org.dijkstra.graph.NeighbourArrayGraphGenerator;
-import org.dijkstra.graph.NeighbourSetGraphGenerator;
 import org.dijkstra.node.CycleNode;
 import org.dijkstra.performance.ConstantDegreePerformanceEnvironment;
 import org.dijkstra.performance.ConstantDegreePerformanceTest;
 import org.dijkstra.performance.PerformanceEnvironment;
 import org.dijkstra.performance.PerformanceTest;
-import org.dijkstra.performance.environment.Neo4jConstantDegreeFibHeapEnvironment;
-import org.dijkstra.performance.environment.Neo4jConstantDegreeFibHeapRandomizedEnvironment;
-import org.dijkstra.performance.environment.Neo4jPriorityQueueEnvironment;
-import org.dijkstra.performance.environment.Neo4jSetPriorityQueueEnvironment;
+import org.dijkstra.performance.environment.constant.Neo4jConstantDegreeFibHeapEnvironment;
+import org.dijkstra.performance.environment.constant.randomized.Neo4jConstantDegreeFibHeapRandomizedEnvironment;
+import org.dijkstra.performance.environment.array.Neo4jPriorityQueueEnvironment;
+import org.dijkstra.performance.environment.set.Neo4jSetPriorityQueueEnvironment;
 
 import java.util.*;
 

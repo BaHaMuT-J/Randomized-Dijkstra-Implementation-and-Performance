@@ -1,11 +1,7 @@
-package org.dijkstra.fib;
+package org.dijkstra.algo.sequential;
 
 import org.dijkstra.fib.wrapper.FibHeap;
 import org.dijkstra.fib.wrapper.FibonacciObject;
-import org.dijkstra.fib.wrapper.PriorityObject;
-import org.dijkstra.fib.wrapper.PriorityQueue;
-import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciHeap;
-import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciObject;
 import org.dijkstra.node.CycleNode;
 
 import java.util.LinkedList;

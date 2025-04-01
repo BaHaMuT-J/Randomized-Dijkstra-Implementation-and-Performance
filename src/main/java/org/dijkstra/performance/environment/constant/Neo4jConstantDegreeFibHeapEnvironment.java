@@ -1,7 +1,6 @@
-package org.dijkstra.performance.environment;
+package org.dijkstra.performance.environment.constant;
 
-import org.dijkstra.fib.ConstantFibonacciHeapDijkstra;
-import org.dijkstra.fib.RandomizedConstantFibonacciHeapDijkstra;
+import org.dijkstra.algo.sequential.ConstantFibonacciHeapDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciObject;
 import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciHeap;
 import org.dijkstra.fib.wrapper.heap.Neo4jFibonacciObject;
@@ -15,7 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-public class Neo4jConstantDegreeFibHeapRandomizedEnvironment implements ConstantDegreePerformanceEnvironment {
+public class Neo4jConstantDegreeFibHeapEnvironment implements ConstantDegreePerformanceEnvironment {
 
 	NeighbourSetGraphGenerator generator = new NeighbourSetGraphGenerator();
 	ConstantDegreeGraph constantDegreeGraph = new ConstantDegreeGraph();
@@ -31,7 +30,7 @@ public class Neo4jConstantDegreeFibHeapRandomizedEnvironment implements Constant
 
 	CycleNode[] originsList;
 
-	public Neo4jConstantDegreeFibHeapRandomizedEnvironment(int size, double p, int previousArrayBuilds, Random random) {
+	public Neo4jConstantDegreeFibHeapEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;
@@ -43,14 +42,13 @@ public class Neo4jConstantDegreeFibHeapRandomizedEnvironment implements Constant
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
 			CycleNode origin = originsList[i];
-			RandomizedConstantFibonacciHeapDijkstra.createPreviousArray(constantDegreeGraph.nodes,
+			ConstantFibonacciHeapDijkstra.createPreviousArray(constantDegreeGraph.nodes,
 					constantDegreeGraph.neighbours,
 					constantDegreeGraph.weights,
 					origin,
 					previous,
 					fibonacciObjectMap,
-					fibonacciHeap,
-					random);
+					fibonacciHeap);
 		}
 	}
 	
@@ -100,14 +98,13 @@ public class Neo4jConstantDegreeFibHeapRandomizedEnvironment implements Constant
 		}
 
 		System.out.println("origin: " + origin);
-		RandomizedConstantFibonacciHeapDijkstra.createPreviousArray(constantDegreeGraph.nodes,
+		ConstantFibonacciHeapDijkstra.createPreviousArray(constantDegreeGraph.nodes,
 				constantDegreeGraph.neighbours,
 				constantDegreeGraph.weights,
 				origin,
 				previous,
 				fibonacciObjectMap,
-				fibonacciHeap,
-				random);
+				fibonacciHeap);
 
 		return previous;
 	}
