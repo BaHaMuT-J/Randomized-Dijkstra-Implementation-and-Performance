@@ -14,7 +14,7 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 	private static Map<Integer, Set<Integer>> Ball;
 	private static Map<Integer, Integer> d;
 	private static Map<Integer, Map<Integer, Integer>> dist;
-	
+
 	public static void createPreviousArray(int[][] neighbours,
 										   int[][] weights,
 										   int source,
@@ -67,10 +67,10 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 
 			for (Integer v : Bundle.get(u)) {
 				Map<Integer, Integer> dist_v = dist.get(v);
-				relax(u, v, min.priority + dist_v.get(u), R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+				relax(firstInBallMap.get(v), v, min.priority + dist_v.get(u), R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				Set<Integer> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (Integer y : ball_v) {
-					if (Objects.equals(y, v)) continue;
+					if (Objects.equals(y, u)) continue;
 					int newPriority = d.get(y) + dist_v.get(y);
 					relax(y, v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				}
@@ -111,8 +111,11 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 			if (!R.contains(v)) {
 				Integer bundle = b.get(v);
 				int newPriority = d.get(v) + dist.get(v).get(bundle);
-				relax(v, bundle, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
-			} else if (!extractedNodes.contains(v)) {
+				int candidate = firstInBallMap.get(v);
+				if (candidate == bundle) {
+					candidate = v;
+				}
+				relax(candidate, bundle, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);			} else if (!extractedNodes.contains(v)) {
 				fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[v], alt);
 			}
 		}
@@ -236,25 +239,25 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 					R);
 		}
 	}
-	
+
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
 			return new int[]{-1};
 		}
-		
+
 		LinkedList<Integer> reversedRoute = new LinkedList<>();
 		int u = destination;
-		
+
 		while (u != -1) {
 			reversedRoute.add(u);
 			u = previous[u];
 		}
-		
+
 		int[] path = new int[reversedRoute.size()];
 		for (int i = 0; i < path.length; ++i) {
 			path[i] = reversedRoute.get(path.length - 1 - i);
 		}
-		
+
 		return path;
 	}
 

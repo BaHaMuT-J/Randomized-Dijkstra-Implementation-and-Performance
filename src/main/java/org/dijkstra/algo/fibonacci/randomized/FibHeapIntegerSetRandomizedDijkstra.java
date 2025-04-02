@@ -63,6 +63,7 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 //		System.out.printf("Bundle: %s\n", Bundle);
 //		System.out.printf("Ball: %s\n", Ball);
 //		System.out.printf("dist: %s\n", dist);
+//		System.out.printf("firstInBallMap: %s\n", firstInBallMap);
 
 		Set<Integer> extractedNodes = new HashSet<>();
 		while (fibHeapInteger.size() != 0) {
@@ -77,11 +78,12 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 				relax(firstInBallMap.get(v), v, min.priority + dist_v.get(u), R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				Set<Integer> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (Integer y : ball_v) {
-					if (Objects.equals(y, v)) continue;
+					if (Objects.equals(y, u)) continue;
 					int newPriority = d.get(y) + dist_v.get(y);
 					relax(y, v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				}
 				for (Integer z2 : ball_v) {
+					if (Objects.equals(z2, u)) continue;
 					for (Integer z1 : neighbours.get(z2)) {
 						int w_z1_z2 = weights.get(z1).get(z2);
 						int newPriority = d.get(z1) + w_z1_z2 + dist_v.get(z2);
@@ -120,7 +122,11 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 			if (!R.contains(v)) {
 				Integer bundle = b.get(v);
 				int newPriority = d.get(v) + dist.get(v).get(bundle);
-				relax(v, bundle, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+				int candidate = firstInBallMap.get(v);
+				if (candidate == bundle) {
+					candidate = v;
+				}
+				relax(candidate, bundle, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 			} else if (!extractedNodes.contains(v)) {
 				fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[v], alt);
 			}
@@ -269,10 +275,14 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		return path;
 	}
 
-	public static int pathCalculate(int[] path, Map<Integer, Map<Integer, Integer>> weights) {
+	public static int pathCalculate(int[] previous, int destination, Map<Integer, Map<Integer, Integer>> weights) {
 		int totalWeight = 0;
-		for (int i = 1; i < path.length; ++i) {
-			totalWeight += weights.get(path[i-1]).get(path[i]);
+		int dest = destination;
+		int prev = previous[destination];
+		while (prev != -1) {
+			totalWeight += weights.get(prev).get(dest);
+			dest = prev;
+			prev = previous[prev];
 		}
 		return totalWeight;
 	}

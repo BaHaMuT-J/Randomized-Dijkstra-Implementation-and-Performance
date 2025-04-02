@@ -1,13 +1,11 @@
 package org.test;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerArrayRandomizedDijkstra;
 import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerSetRandomizedDijkstra;
 import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerArraySequentialDijkstra;
 import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerSetSequentialDijkstra;
 import org.dijkstra.node.CycleNode;
 import org.dijkstra.performance.CycleNodePerformanceEnvironment;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
-import org.dijkstra.performance.environment.array.randomized.Neo4JFibHeapIntegerArrayRandomizedEnvironment;
 import org.dijkstra.performance.environment.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
 import org.dijkstra.performance.environment.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
 import org.dijkstra.performance.environment.array.sequential.Neo4JFibHeapIntegerArraySequentialEnvironment;
@@ -18,37 +16,38 @@ import java.util.*;
 
 public class GraphGeneratorTest {
 
-    private static void parameterizedMeasurementIntegerArraySequential(int size, double p) {
-        IntegerPerformanceEnvironment environmentNeo4jPriorityQueue = new Neo4JFibHeapIntegerArraySequentialEnvironment(size, p, 20, new Random(42));
-
-        int[] pPriorityQueue = environmentNeo4jPriorityQueue.testPrevious(42);
-//        IntegerPerformanceTest testPriorityQueue = new IntegerPerformanceTest(environmentNeo4jPriorityQueue);
-//        double mPriorityQueue = testPriorityQueue.measurement(20, true, false, 3, 3);
-
-        System.out.println(Arrays.toString(pPriorityQueue));
-
-        int[][] previous = new int[pPriorityQueue.length][];
-        for (int i = 0; i < pPriorityQueue.length; i++) {
-            previous[i] = FibHeapIntegerArraySequentialDijkstra.shortestPath(pPriorityQueue, i);
-        }
-        System.out.println(Arrays.deepToString(previous));
-    }
-
-    private static void parameterizedMeasurementIntegerArrayRandomized(int size, double p) {
-        IntegerPerformanceEnvironment environmentNeo4jPriorityQueue = new Neo4JFibHeapIntegerArrayRandomizedEnvironment(size, p, 20, new Random(42));
-
-        int[] pPriorityQueue = environmentNeo4jPriorityQueue.testPrevious(42);
-//        IntegerPerformanceTest testPriorityQueue = new IntegerPerformanceTest(environmentNeo4jPriorityQueue);
-//        double mPriorityQueue = testPriorityQueue.measurement(20, true, false, 3, 3);
-
-        System.out.println(Arrays.toString(pPriorityQueue));
-
-        int[][] previous = new int[pPriorityQueue.length][];
-        for (int i = 0; i < pPriorityQueue.length; i++) {
-            previous[i] = FibHeapIntegerArrayRandomizedDijkstra.shortestPath(pPriorityQueue, i);
-        }
-        System.out.println(Arrays.deepToString(previous));
-    }
+//    private static void parameterizedMeasurementIntegerArraySequential(int size, double p) {
+//        IntegerPerformanceEnvironment environmentNeo4jPriorityQueue = new Neo4JFibHeapIntegerArraySequentialEnvironment(size, p, 20, new Random(42));
+//
+//        int[] pPriorityQueue = environmentNeo4jPriorityQueue.testPrevious(42);
+////        IntegerPerformanceTest testPriorityQueue = new IntegerPerformanceTest(environmentNeo4jPriorityQueue);
+////        double mPriorityQueue = testPriorityQueue.measurement(20, true, false, 3, 3);
+//
+//        System.out.println(Arrays.toString(pPriorityQueue));
+//
+//        int[][] previous = new int[pPriorityQueue.length][];
+//        for (int i = 0; i < pPriorityQueue.length; i++) {
+//            previous[i] = FibHeapIntegerArraySequentialDijkstra.shortestPath(pPriorityQueue, i);
+//        }
+//        System.out.println(Arrays.deepToString(previous));
+//    }
+//
+//    private static void parameterizedMeasurementIntegerArrayRandomized(int size, double p) {
+//        IntegerPerformanceEnvironment environmentNeo4jPriorityQueue = new Neo4JFibHeapIntegerArrayRandomizedEnvironment(size, p, 20, new Random(42));
+//
+//        int[] pPriorityQueue = environmentNeo4jPriorityQueue.testPrevious(42);
+////        IntegerPerformanceTest testPriorityQueue = new IntegerPerformanceTest(environmentNeo4jPriorityQueue);
+////        double mPriorityQueue = testPriorityQueue.measurement(20, true, false, 3, 3);
+//
+//        System.out.println(Arrays.toString(pPriorityQueue));
+//
+//        int[][] previous = new int[pPriorityQueue.length][];
+//        for (int i = 0; i < pPriorityQueue.length; i++) {
+//            FibHeapIn
+//            previous[i] = FibHeapIntegerArrayRandomizedDijkstra.shortestPath(pPriorityQueue, i);
+//        }
+//        System.out.println(Arrays.deepToString(previous));
+//    }
 
     private static void parameterizedMeasurementIntegerSetSequential(int size, double p) {
         IntegerPerformanceEnvironment environmentNeo4jPriorityQueueSet = new Neo4JFibHeapIntegerSetSequentialEnvironment(size, p, 1, new Random(42));
@@ -129,9 +128,9 @@ public class GraphGeneratorTest {
 //
 //        System.out.println("*********************************************************");
 
-//        GraphGeneratorTest.parameterizedMeasurementIntegerSetSequential(size, p);
-//
-//        System.out.println("*********************************************************");
+        GraphGeneratorTest.parameterizedMeasurementIntegerSetSequential(size, p);
+
+        System.out.println("*********************************************************");
 
         GraphGeneratorTest.parameterizedMeasurementIntegerSetRandomized(size, p);
 

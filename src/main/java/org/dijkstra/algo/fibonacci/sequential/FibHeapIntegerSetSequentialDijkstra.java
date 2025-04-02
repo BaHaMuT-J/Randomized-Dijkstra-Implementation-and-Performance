@@ -67,10 +67,14 @@ public class FibHeapIntegerSetSequentialDijkstra {
 		return path;
 	}
 
-	public static int pathCalculate(int[] path, Map<Integer, Map<Integer, Integer>> weights) {
+	public static int pathCalculate(int[] previous, int destination, Map<Integer, Map<Integer, Integer>> weights) {
 		int totalWeight = 0;
-		for (int i = 1; i < path.length; ++i) {
-			totalWeight += weights.get(path[i-1]).get(path[i]);
+		int dest = destination;
+		int prev = previous[destination];
+		while (prev != -1) {
+			totalWeight += weights.get(prev).get(dest);
+			dest = prev;
+			prev = previous[prev];
 		}
 		return totalWeight;
 	}

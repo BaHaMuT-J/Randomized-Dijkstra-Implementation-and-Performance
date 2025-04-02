@@ -1,19 +1,21 @@
 package org.test.fibonacci.array;
 
 public class FibHeapIntegerArrayGraphAnalysisMain extends DijkstraPerformanceFibHeapIntegerArray {
-	
+
 	public static void main(String[] args) {
 		new FibHeapIntegerArrayGraphAnalysisMain().run();
 	}
-	
+
 	private void run() {
 //		runWithConstantP(0.1);
 //		runWithConstantP(0.3);
-		runWithConstantP(0.5);
+//		runWithConstantP(0.5);
 //		runWithConstantP(0.7);
 //		runWithConstantP(0.9);
+
+		testPrevious(0.5);
 	}
-	
+
 	private void runWithConstantP(double p) {
 		int n = 100;
 
@@ -31,7 +33,15 @@ public class FibHeapIntegerArrayGraphAnalysisMain extends DijkstraPerformanceFib
 //			}
 //			System.out.println();
 //		}
-		
+
+	}
+
+	private void testPrevious(double p) {
+		int n = 10;
+
+		for (int i = 1; i <= n; ++i) {
+			testPreviousArray(10 * i, p);
+		}
 	}
 
 }

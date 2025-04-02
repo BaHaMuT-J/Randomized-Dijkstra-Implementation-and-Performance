@@ -81,6 +81,12 @@ public class Neo4JFibHeapIntegerSetRandomizedEnvironment implements IntegerPerfo
 				fibonacciHeap,
 				random);
 
+		System.out.printf("previous: %s\n", Arrays.toString(previous));
+		for (int i = 0; i < previous.length; ++i) {
+			System.out.printf("i: %d | neighbor: %s | previous[i]: %d | ", i, generator.neighbours.get(i), previous[i]);
+			int total = FibHeapIntegerSetRandomizedDijkstra.pathCalculate(previous, i, generator.weights);
+			System.out.printf("total: %d\n", total);
+		}
 		return previous;
 	}
 }

@@ -15,7 +15,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 	private static Map<CycleNode, Set<CycleNode>> Ball;
 	private static Map<CycleNode, Integer> d;
 	private static Map<CycleNode, Map<CycleNode, Integer>> dist;
-	
+
 	public static void createPreviousArray(Set<CycleNode> nodes,
 										   Map<CycleNode, Set<CycleNode>> neighbours,
 										   Map<CycleNode, Map<CycleNode, Integer>> weights,
@@ -69,10 +69,10 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 
 			for (CycleNode v : Bundle.get(u)) {
 				Map<CycleNode, Integer> dist_v = dist.get(v);
-				relax(u, v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+				relax(firstInBallMap.get(v), v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				Set<CycleNode> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (CycleNode y : ball_v) {
-					if (Objects.equals(y, v)) continue;
+					if (Objects.equals(y, u)) continue;
 					int newDistance = d.get(y) + dist_v.get(y);
 					relax(y, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				}
@@ -113,7 +113,11 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 			if (!R.contains(v)) {
 				CycleNode bundle = b.get(v);
 				int newDistance = d.get(v) + dist.get(v).get(bundle);
-				relax(v, bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+				CycleNode candidate = firstInBallMap.get(v);
+				if (candidate == bundle) {
+					candidate = v;
+				}
+				relax(candidate, bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 			} else if (!extractedNodes.contains(v)) {
 				fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(v), alt);
 			}
@@ -238,25 +242,25 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 					R);
 		}
 	}
-	
+
 	public static int[] shortestPath(int[] previous, int destination) {
 		if (previous[destination] == -1) {
 			return new int[]{-1};
 		}
-		
+
 		LinkedList<Integer> reversedRoute = new LinkedList<>();
 		int u = destination;
-		
+
 		while (u != -1) {
 			reversedRoute.add(u);
 			u = previous[u];
 		}
-		
+
 		int[] path = new int[reversedRoute.size()];
 		for (int i = 0; i < path.length; ++i) {
 			path[i] = reversedRoute.get(path.length - 1 - i);
 		}
-		
+
 		return path;
-	}		
+	}
 }

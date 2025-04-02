@@ -1,5 +1,6 @@
 package org.dijkstra.performance.environment.set.sequential;
 
+import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerSetRandomizedDijkstra;
 import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerSetSequentialDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapInteger;
@@ -66,6 +67,12 @@ public class Neo4JFibHeapIntegerSetSequentialEnvironment implements IntegerPerfo
 		System.out.println("origin: " + origin);
 		FibHeapIntegerSetSequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
 
+		System.out.printf("previous: %s\n", Arrays.toString(previous));
+		for (int i = 0; i < previous.length; ++i) {
+			System.out.printf("i: %d | neighbor: %s | previous[i]: %d | ", i, generator.neighbours.get(i), previous[i]);
+			int total = FibHeapIntegerSetSequentialDijkstra.pathCalculate(previous, i, generator.weights);
+			System.out.printf("total: %d\n", total);
+		}
 		return previous;
 	}
 }

@@ -28,7 +28,7 @@ public class Neo4JFibHeapIntegerArrayRandomizedEnvironment implements IntegerPer
 		this.previousArrayBuilds = previousArrayBuilds;
 		this.random = random;
 	}
-	
+
 	@Override
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
@@ -42,7 +42,7 @@ public class Neo4JFibHeapIntegerArrayRandomizedEnvironment implements IntegerPer
 					random);
 		}
 	}
-	
+
 	@Override
 	public void generateGraph() {
 		previous = new int[size];
@@ -67,7 +67,7 @@ public class Neo4JFibHeapIntegerArrayRandomizedEnvironment implements IntegerPer
 		for (int i = 0; i < size; ++i) {
 			fibObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
 		}
-		
+
 		int origin = random.nextInt(size);
 		System.out.println("origin: " + origin);
 		FibHeapIntegerArrayRandomizedDijkstra.createPreviousArray(generator.neighbours,
