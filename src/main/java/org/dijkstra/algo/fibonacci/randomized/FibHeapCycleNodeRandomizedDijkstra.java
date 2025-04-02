@@ -11,6 +11,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 
 	private static Map<CycleNode, CycleNode> b;
 	private static Map<CycleNode, CycleNode> firstInBallMap;
+	private static Map<CycleNode, Map<CycleNode, CycleNode>> previousBallMap;
 	private static Map<CycleNode, Set<CycleNode>> Bundle;
 	private static Map<CycleNode, Set<CycleNode>> Ball;
 	private static Map<CycleNode, Integer> d;
@@ -31,6 +32,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 
 		b = new HashMap<>();
 		firstInBallMap = new HashMap<>();
+		previousBallMap = new HashMap<>();
 		Bundle = new HashMap<>();
 		Ball = new HashMap<>();
 		d = new HashMap<>();
@@ -72,15 +74,18 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 				relax(firstInBallMap.get(v), v, min.distance + dist_v.get(u), R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				Set<CycleNode> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (CycleNode y : ball_v) {
-					if (Objects.equals(y, u)) continue;
 					int newDistance = d.get(y) + dist_v.get(y);
-					relax(y, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+					relax(firstInBallMap.get(v), v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 				}
 				for (CycleNode z2 : ball_v) {
 					for (CycleNode z1 : neighbours.get(z2)) {
 						int w_z1_z2 = weights.get(z1).get(z2);
 						int newDistance = d.get(z1) + w_z1_z2 + dist_v.get(z2);
-						relax(z2, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+						CycleNode candidate = firstInBallMap.get(v);
+						if (Objects.equals(z2, v)) {
+							candidate = z2;
+						}
+						relax(candidate, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					}
 				}
 			}
@@ -92,7 +97,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 					relax(x, y, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					for (CycleNode z1 : Ball.get(y)) {
 						newDistance = d.get(x) + w_x_y + dist.get(y).get(z1);
-						relax(y, z1, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+						relax(previousBallMap.get(y).get(z1), z1, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					}
 				}
 			}
@@ -113,11 +118,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 			if (!R.contains(v)) {
 				CycleNode bundle = b.get(v);
 				int newDistance = d.get(v) + dist.get(v).get(bundle);
-				CycleNode candidate = firstInBallMap.get(v);
-				if (candidate == bundle) {
-					candidate = v;
-				}
-				relax(candidate, bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
+				relax(previousBallMap.get(v).get(bundle), bundle, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 			} else if (!extractedNodes.contains(v)) {
 				fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(v), alt);
 			}
@@ -163,6 +164,8 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 		CycleNode bundle = null;
 		boolean foundFirstInBall = false;
 
+		Map<CycleNode, CycleNode> previousBall = new HashMap<>();
+
 		while (fibonacciHeap.size() != 0) {
 
 			// extract min
@@ -182,14 +185,17 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 					FibonacciCycleNodeObject object = new Neo4JFibonacciCycleNodeObject(neighbour, alt);
 					fibonacciObjectMap.put(neighbour, object);
 					fibonacciHeap.add(object);
+					previousBall.put(neighbour, u);
 				} else if (alt < fibonacciObjectMap.get(neighbour).distance) {
 					fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(neighbour), alt);
+					previousBall.put(neighbour, u);
 				}
 			}
 
 			// If extracted node is in R, stop
 			if (R.contains(u)) {
 				bundle = u;
+				previousBallMap.put(source, previousBall);
 				break;
 			}
 		}
@@ -203,7 +209,9 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 		Bundle.put(bundle, bundleU);
 
 		// for all vertices v meet before u, they are include in Ball(v)
-		Ball.put(source, shortestDist.keySet());
+		Set<CycleNode> ball = new HashSet<>(shortestDist.keySet());
+		ball.remove(bundle);
+		Ball.put(source, ball);
 
 		// priority from vertex v to each vertex in Ball(v)
 		dist.put(source, shortestDist);

@@ -10,6 +10,7 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 
 	private static Map<Integer, Integer> b;
 	private static Map<Integer, Integer> firstInBallMap;
+	private static Map<Integer, Map<Integer, Integer>> previousBallMap;
 	private static Map<Integer, Set<Integer>> Bundle;
 	private static Map<Integer, Set<Integer>> Ball;
 	private static Map<Integer, Integer> d;
@@ -30,6 +31,7 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 
 		b = new HashMap<>();
 		firstInBallMap = new HashMap<>();
+		previousBallMap = new HashMap<>();
 		Bundle = new HashMap<>();
 		Ball = new HashMap<>();
 		d = new HashMap<>();
@@ -64,6 +66,9 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 //		System.out.printf("Ball: %s\n", Ball);
 //		System.out.printf("dist: %s\n", dist);
 //		System.out.printf("firstInBallMap: %s\n", firstInBallMap);
+//		System.out.printf("previousBallMap: %s\n", previousBallMap);
+//		int test = 29;
+//		if (nodes.size() >= 30) System.out.printf("neighbor %d: %s\nweight %d: %s\n", test, neighbours.get(test), test, weights.get(24));
 
 		Set<Integer> extractedNodes = new HashSet<>();
 		while (fibHeapInteger.size() != 0) {
@@ -75,19 +80,24 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 
 			for (Integer v : Bundle.get(u)) {
 				Map<Integer, Integer> dist_v = dist.get(v);
+//				if (Objects.equals(v ,test)) System.out.printf("v: %d | firstInBallMap[v]: %d | u: %d\n", v, firstInBallMap.get(v), u);
 				relax(firstInBallMap.get(v), v, min.priority + dist_v.get(u), R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				Set<Integer> ball_v = Ball.getOrDefault(v, new HashSet<>());
 				for (Integer y : ball_v) {
-					if (Objects.equals(y, u)) continue;
 					int newPriority = d.get(y) + dist_v.get(y);
-					relax(y, v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+//					if (Objects.equals(v ,test)) System.out.printf("v: %d | firstInBallMap[v]: %d | y: %d\n", v, firstInBallMap.get(v), y);
+					relax(firstInBallMap.get(v), v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 				}
 				for (Integer z2 : ball_v) {
-					if (Objects.equals(z2, u)) continue;
 					for (Integer z1 : neighbours.get(z2)) {
 						int w_z1_z2 = weights.get(z1).get(z2);
 						int newPriority = d.get(z1) + w_z1_z2 + dist_v.get(z2);
-						relax(z2, v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+						int candidate = firstInBallMap.get(v);
+						if (Objects.equals(z2, v)) {
+							candidate = z2;
+						}
+//						 if (Objects.equals(v ,test)) System.out.printf("v: %d | candidate: %d | z1: %d | z2: %d\n", v, candidate, z1, z2);
+						relax(candidate, v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 					}
 				}
 			}
@@ -96,10 +106,12 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 				for (Integer y : neighbours.get(x)) {
 					int w_x_y = weights.get(x).get(y);
 					int newPriority = d.get(x) + w_x_y;
+//					if (Objects.equals(y ,test)) System.out.printf("y: %d | x: %d\n", y, x);
 					relax(x, y, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 					for (Integer z1 : Ball.get(y)) {
 						newPriority = d.get(x) + w_x_y + dist.get(y).get(z1);
-						relax(y, z1, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+//						if (Objects.equals(z1 ,test)) System.out.printf("z1: %d | prevBall_y_z1: %d | x: %d | y: %d\n", z1, previousBallMap.get(y).get(z1), x, y);
+						relax(previousBallMap.get(y).get(z1), z1, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 					}
 				}
 			}
@@ -116,17 +128,18 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 							  FibonacciIntegerObject[] fibonacciIntegerObjectArray,
 							  FibHeapInteger<FibonacciIntegerObject> fibHeapInteger,
 							  int[] previous) {
+//		int test = 29;
+//		if (Objects.equals(v ,test)) {
+//			System.out.printf("relax v: %d | u: %d | previous[v]: %d | d[v]: %d | alt: %d\n", v, u, previous[v], d.get(v), alt);
+//		}
 		if (alt >= 0 && alt < d.get(v)) {
 			d.put(v, alt);
 			previous[v] = u;
 			if (!R.contains(v)) {
 				Integer bundle = b.get(v);
 				int newPriority = d.get(v) + dist.get(v).get(bundle);
-				int candidate = firstInBallMap.get(v);
-				if (candidate == bundle) {
-					candidate = v;
-				}
-				relax(candidate, bundle, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
+//				if (Objects.equals(bundle ,test)) System.out.printf("bundle: %d | v: %d | previousBallMap[v][bundle]: %d\n", bundle, v, previousBallMap.get(v).get(bundle));
+				relax(previousBallMap.get(v).get(bundle), bundle, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 			} else if (!extractedNodes.contains(v)) {
 				fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[v], alt);
 			}
@@ -173,6 +186,8 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		Integer bundle = null;
 		boolean foundFirstInBall = false;
 
+		Map<Integer, Integer> previousBall = new HashMap<>();
+
 		while (fibHeapInteger.size() != 0) {
 
 			// extract min
@@ -192,14 +207,17 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 					FibonacciIntegerObject object = new Neo4JFibonacciIntegerObject(neighbour, alt);
 					fibonacciIntegerObjectArray[neighbour] = object;
 					fibHeapInteger.add(object);
+					previousBall.put(neighbour, u);
 				} else if (alt < fibonacciIntegerObjectArray[neighbour].priority) {
 					fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[neighbour], alt);
+					previousBall.put(neighbour, u);
 				}
 			}
 
 			// If extracted node is in R, stop
 			if (R.contains(u)) {
 				bundle = u;
+				previousBallMap.put(source, previousBall);
 				break;
 			}
 		}
@@ -213,7 +231,9 @@ public class FibHeapIntegerSetRandomizedDijkstra {
 		Bundle.put(bundle, bundleU);
 
 		// for all vertices v meet before u, they are include in Ball(v)
-		Ball.put(source, shortestDist.keySet());
+		Set<Integer> ball = new HashSet<>(shortestDist.keySet());
+		ball.remove(bundle);
+		Ball.put(source, ball);
 
 		// priority from vertex v to each vertex in Ball(v)
 		dist.put(source, shortestDist);
