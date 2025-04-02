@@ -1,27 +1,25 @@
-package org.test.fibonacci.array;
+package org.test.binary.cycle;
 
-public class FibHeapIntegerArrayGraphAnalysisMain extends DijkstraPerformanceFibHeapIntegerArray {
-
+public class BinHeapCycleNodeGraphAnalysisMain extends DijkstraPerformanceBinHeapCycleNode {
+	
 	public static void main(String[] args) {
-		new FibHeapIntegerArrayGraphAnalysisMain().run();
+		new BinHeapCycleNodeGraphAnalysisMain().run();
 	}
-
+	
 	private void run() {
 		runWithConstantP(0.1);
 		runWithConstantP(0.3);
 		runWithConstantP(0.5);
 		runWithConstantP(0.7);
 		runWithConstantP(0.9);
-
-//		testPrevious(0.5);
 	}
-
+	
 	private void runWithConstantP(double p) {
-		int n = 100;
-
+		int n = 50;
+		
 		double[][] results = new double[n][];
 		for (int i = 1; i <= n; ++i) {
-			results[i-1] = parameterizedMeasurementIntegerArray(10 * i, p);
+			results[i-1] = parameterizedMeasurementConstantDegree(10 * i, p);
 		}
 //		for (int i = 0; i < n; ++i) {
 //			if (results[i] == null) {
@@ -33,15 +31,7 @@ public class FibHeapIntegerArrayGraphAnalysisMain extends DijkstraPerformanceFib
 //			}
 //			System.out.println();
 //		}
-
-	}
-
-	private void testPrevious(double p) {
-		int n = 10;
-
-		for (int i = 1; i <= n; ++i) {
-			testPreviousArray(10 * i, p);
-		}
+		
 	}
 
 }

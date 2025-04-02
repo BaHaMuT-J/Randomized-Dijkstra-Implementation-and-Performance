@@ -1,9 +1,9 @@
-package org.test.fibonacci.array;
+package org.test.binary.set;
 
-public class FibHeapIntegerArrayGraphAnalysisMain extends DijkstraPerformanceFibHeapIntegerArray {
+public class BinHeapIntegerSetGraphAnalysisMain extends DijkstraPerformanceBinHeapIntegerSet {
 
 	public static void main(String[] args) {
-		new FibHeapIntegerArrayGraphAnalysisMain().run();
+		new BinHeapIntegerSetGraphAnalysisMain().run();
 	}
 
 	private void run() {

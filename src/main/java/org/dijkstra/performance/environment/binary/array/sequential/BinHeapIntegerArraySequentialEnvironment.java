@@ -1,28 +1,27 @@
-package org.dijkstra.performance.environment.array.sequential;
+package org.dijkstra.performance.environment.binary.array.sequential;
 
 import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerArraySequentialDijkstra;
-import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
-import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapInteger;
+import org.dijkstra.fib.wrapper.FibonacciIntegerObject;
+import org.dijkstra.fib.wrapper.heap.BinaryHeapInteger;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
 
-import java.util.Arrays;
 import java.util.Random;
 
-public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPerformanceEnvironment {
+public class BinHeapIntegerArraySequentialEnvironment implements IntegerPerformanceEnvironment {
 
 	NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 
 	int[] previous;
-	Neo4JFibonacciIntegerObject[] fibObjectArray;
-	Neo4JFibHeapInteger fibonacciHeap;
+	FibonacciIntegerObject[] fibObjectArray;
+	BinaryHeapInteger fibonacciHeap;
 	Random random;
 
 	int size;
 	double p;
 	int previousArrayBuilds;
 
-	public Neo4JFibHeapIntegerArraySequentialEnvironment(int size, double p, int previousArrayBuilds, Random random) {
+	public BinHeapIntegerArraySequentialEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;
@@ -41,10 +40,10 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 	public void generateGraph() {
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
-		fibonacciHeap = new Neo4JFibHeapInteger();
-		fibObjectArray = new Neo4JFibonacciIntegerObject[size];
+		fibonacciHeap = new BinaryHeapInteger();
+		fibObjectArray = new FibonacciIntegerObject[size];
 		for (int i = 0; i < size; ++i) {
-			fibObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
+			fibObjectArray[i] = new FibonacciIntegerObject(i, 0);
 		}
 	}
 
@@ -56,10 +55,10 @@ public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPer
 //		System.out.println(Arrays.deepToString(generator.neighbours));
 //		System.out.println(Arrays.deepToString(generator.weights));
 
-		fibonacciHeap = new Neo4JFibHeapInteger();
-		fibObjectArray = new Neo4JFibonacciIntegerObject[size];
+		fibonacciHeap = new BinaryHeapInteger();
+		fibObjectArray = new FibonacciIntegerObject[size];
 		for (int i = 0; i < size; ++i) {
-			fibObjectArray[i] = new Neo4JFibonacciIntegerObject(i, 0);
+			fibObjectArray[i] = new FibonacciIntegerObject(i, 0);
 		}
 		
 		int origin = random.nextInt(size);

@@ -4,12 +4,11 @@ import org.dijkstra.fib.wrapper.FibHeapCycleNode;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
 import org.dijkstra.node.CycleNode;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class FibHeapCycleNodeSequentialDijkstra {
+
+	private static Map<CycleNode, Integer> d;
 	
 	public static void createPreviousArray(Set<CycleNode> nodes,
 										   Map<CycleNode, Set<CycleNode>> neighbours,
@@ -29,6 +28,9 @@ public class FibHeapCycleNodeSequentialDijkstra {
 			fibonacciHeap.add(object);
 		}
 		previous.put(source, new CycleNode(-1, -1));
+
+		d = new HashMap<>();
+		d.put(source, 0);
 				
 		while (fibonacciHeap.size() != 0) {
 			
@@ -41,6 +43,7 @@ public class FibHeapCycleNodeSequentialDijkstra {
 				int alt = fibonacciObjectMap.get(u).distance + weightsU.get(neighbour);
 				if (alt >= 0 && alt < fibonacciObjectMap.get(neighbour).distance) {
 					fibonacciHeap.decreaseDistance(fibonacciObjectMap.get(neighbour), alt);
+					d.put(neighbour, alt);
 					previous.put(neighbour, u);
 				}
 			}

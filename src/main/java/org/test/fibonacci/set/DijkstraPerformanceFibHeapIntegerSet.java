@@ -1,13 +1,9 @@
 package org.test.fibonacci.set;
 
-import org.dijkstra.performance.CycleNodePerformanceEnvironment;
-import org.dijkstra.performance.CycleNodePerformanceTest;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
 import org.dijkstra.performance.IntegerPerformanceTest;
-import org.dijkstra.performance.environment.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
-import org.dijkstra.performance.environment.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
-import org.dijkstra.performance.environment.set.randomized.Neo4JFibHeapIntegerSetRandomizedEnvironment;
-import org.dijkstra.performance.environment.set.sequential.Neo4JFibHeapIntegerSetSequentialEnvironment;
+import org.dijkstra.performance.environment.fibonacci.set.randomized.Neo4JFibHeapIntegerSetRandomizedEnvironment;
+import org.dijkstra.performance.environment.fibonacci.set.sequential.Neo4JFibHeapIntegerSetSequentialEnvironment;
 
 import java.io.FileWriter;
 import java.io.IOException;

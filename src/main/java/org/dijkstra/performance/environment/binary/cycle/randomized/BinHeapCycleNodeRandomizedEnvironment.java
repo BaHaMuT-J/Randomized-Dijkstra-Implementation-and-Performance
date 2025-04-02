@@ -1,9 +1,8 @@
-package org.dijkstra.performance.environment.cycle.sequential;
+package org.dijkstra.performance.environment.binary.cycle.randomized;
 
-import org.dijkstra.algo.fibonacci.sequential.FibHeapCycleNodeSequentialDijkstra;
+import org.dijkstra.algo.fibonacci.randomized.FibHeapCycleNodeRandomizedDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
-import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciCycleNodeObject;
-import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapCycleNode;
+import org.dijkstra.fib.wrapper.heap.BinaryHeapCycleNode;
 import org.dijkstra.graph.ConstantDegreeGraph;
 import org.dijkstra.graph.NeighbourSetGraphGenerator;
 import org.dijkstra.node.CycleNode;
@@ -14,14 +13,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerformanceEnvironment {
+public class BinHeapCycleNodeRandomizedEnvironment implements CycleNodePerformanceEnvironment {
 
 	NeighbourSetGraphGenerator generator = new NeighbourSetGraphGenerator();
 	ConstantDegreeGraph constantDegreeGraph = new ConstantDegreeGraph();
 
 	Map<CycleNode, CycleNode> previous;
 	Map<CycleNode, FibonacciCycleNodeObject> fibonacciObjectMap;
-	Neo4JFibHeapCycleNode fibonacciHeap;
+	BinaryHeapCycleNode fibonacciHeap;
 	Random random;
 
 	int size;
@@ -30,7 +29,7 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 
 	CycleNode[] originsList;
 
-	public Neo4jFibHeapCycleNodeSequentialEnvironment(int size, double p, int previousArrayBuilds, Random random) {
+	public BinHeapCycleNodeRandomizedEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;
@@ -42,13 +41,14 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
 			CycleNode origin = originsList[i];
-			FibHeapCycleNodeSequentialDijkstra.createPreviousArray(constantDegreeGraph.nodes,
+			FibHeapCycleNodeRandomizedDijkstra.createPreviousArray(constantDegreeGraph.nodes,
 					constantDegreeGraph.neighbours,
 					constantDegreeGraph.weights,
 					origin,
 					previous,
 					fibonacciObjectMap,
-					fibonacciHeap);
+					fibonacciHeap,
+					random);
 		}
 	}
 	
@@ -57,10 +57,10 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 		previous = new HashMap<>();
 		generator.generateRandomGraph(size, p, random);
 		constantDegreeGraph.transformGraph(generator);
-		fibonacciHeap = new Neo4JFibHeapCycleNode();
+		fibonacciHeap = new BinaryHeapCycleNode();
 		fibonacciObjectMap = new HashMap<>();
 		for (CycleNode node : constantDegreeGraph.nodes) {
-			fibonacciObjectMap.put(node, new Neo4JFibonacciCycleNodeObject(node, 0));
+			fibonacciObjectMap.put(node, new FibonacciCycleNodeObject(node, 0));
 		}
 
 		// Prepare origins for each test iteration
@@ -83,10 +83,10 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 
 		constantDegreeGraph.transformGraph(generator);
 
-		fibonacciHeap = new Neo4JFibHeapCycleNode();
+		fibonacciHeap = new BinaryHeapCycleNode();
 		fibonacciObjectMap = new HashMap<>();
 		for (CycleNode node : constantDegreeGraph.nodes) {
-			fibonacciObjectMap.put(node, new Neo4JFibonacciCycleNodeObject(node, 0));
+			fibonacciObjectMap.put(node, new FibonacciCycleNodeObject(node, 0));
 		}
 
 		// Manually random element from nodes
@@ -99,13 +99,14 @@ public class Neo4jFibHeapCycleNodeSequentialEnvironment implements CycleNodePerf
 
 		origin = new CycleNode(7, 4);
 		System.out.println("origin: " + origin);
-		FibHeapCycleNodeSequentialDijkstra.createPreviousArray(constantDegreeGraph.nodes,
+		FibHeapCycleNodeRandomizedDijkstra.createPreviousArray(constantDegreeGraph.nodes,
 				constantDegreeGraph.neighbours,
 				constantDegreeGraph.weights,
 				origin,
 				previous,
 				fibonacciObjectMap,
-				fibonacciHeap);
+				fibonacciHeap,
+				random);
 
 		return previous;
 	}

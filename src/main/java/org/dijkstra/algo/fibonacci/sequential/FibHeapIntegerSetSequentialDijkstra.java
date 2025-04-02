@@ -3,11 +3,14 @@ package org.dijkstra.algo.fibonacci.sequential;
 import org.dijkstra.fib.wrapper.FibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.FibHeapInteger;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 public class FibHeapIntegerSetSequentialDijkstra {
+
+	private static Map<Integer, Integer> d;
 	
 	public static void createPreviousArray(Map<Integer, Set<Integer>> neighbours, Map<Integer, Map<Integer, Integer>> weights, int source, int[] previous, FibonacciIntegerObject[] fibonacciIntegerObjectArray, FibHeapInteger<FibonacciIntegerObject> fibHeapInteger) {
 		
@@ -17,6 +20,9 @@ public class FibHeapIntegerSetSequentialDijkstra {
 		}
 		
 		fibonacciIntegerObjectArray[source].priority = 0;
+
+		d = new HashMap<>();
+		d.put(source, 0);
 		
 		fibHeapInteger.clear();
         for (FibonacciIntegerObject fibonacciIntegerObject : fibonacciIntegerObjectArray) {
@@ -40,6 +46,7 @@ public class FibHeapIntegerSetSequentialDijkstra {
 				int alt = fibonacciIntegerObjectArray[u].priority + weightsU.get(neighbour);
 				if (alt < fibonacciIntegerObjectArray[neighbour].priority) {
 					fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[neighbour], alt);
+					d.put(neighbour, alt);
 					previous[neighbour] = u;
 				}
 			}

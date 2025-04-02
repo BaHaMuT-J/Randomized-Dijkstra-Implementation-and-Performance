@@ -1,16 +1,12 @@
 package org.test;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerSetRandomizedDijkstra;
-import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerArraySequentialDijkstra;
-import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerSetSequentialDijkstra;
 import org.dijkstra.node.CycleNode;
 import org.dijkstra.performance.CycleNodePerformanceEnvironment;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
-import org.dijkstra.performance.environment.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
-import org.dijkstra.performance.environment.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
-import org.dijkstra.performance.environment.array.sequential.Neo4JFibHeapIntegerArraySequentialEnvironment;
-import org.dijkstra.performance.environment.set.randomized.Neo4JFibHeapIntegerSetRandomizedEnvironment;
-import org.dijkstra.performance.environment.set.sequential.Neo4JFibHeapIntegerSetSequentialEnvironment;
+import org.dijkstra.performance.environment.fibonacci.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
+import org.dijkstra.performance.environment.fibonacci.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
+import org.dijkstra.performance.environment.fibonacci.set.randomized.Neo4JFibHeapIntegerSetRandomizedEnvironment;
+import org.dijkstra.performance.environment.fibonacci.set.sequential.Neo4JFibHeapIntegerSetSequentialEnvironment;
 
 import java.util.*;
 

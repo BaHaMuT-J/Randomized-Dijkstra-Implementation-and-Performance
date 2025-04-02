@@ -7,13 +7,13 @@ public class FibHeapIntegerSetGraphAnalysisMain extends DijkstraPerformanceFibHe
 	}
 	
 	private void run() {
-//		runWithConstantP(0.1);
-//		runWithConstantP(0.3);
-//		runWithConstantP(0.5);
-//		runWithConstantP(0.7);
-//		runWithConstantP(0.9);
+		runWithConstantP(0.1);
+		runWithConstantP(0.3);
+		runWithConstantP(0.5);
+		runWithConstantP(0.7);
+		runWithConstantP(0.9);
 
-		testPrevious(0.5);
+//		testPrevious(0.5);
 	}
 	
 	private void runWithConstantP(double p) {

@@ -7,15 +7,15 @@ public class FibHeapCycleNodeGraphAnalysisMain extends DijkstraPerformanceFibHea
 	}
 	
 	private void run() {
-//		runWithConstantP(0.1);
-//		runWithConstantP(0.3);
+		runWithConstantP(0.1);
+		runWithConstantP(0.3);
 		runWithConstantP(0.5);
-//		runWithConstantP(0.7);
-//		runWithConstantP(0.9);
+		runWithConstantP(0.7);
+		runWithConstantP(0.9);
 	}
 	
 	private void runWithConstantP(double p) {
-		int n = 100;
+		int n = 50;
 		
 		double[][] results = new double[n][];
 		for (int i = 1; i <= n; ++i) {

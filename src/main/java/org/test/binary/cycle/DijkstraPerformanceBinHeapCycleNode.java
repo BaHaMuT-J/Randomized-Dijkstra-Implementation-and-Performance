@@ -1,27 +1,27 @@
-package org.test.fibonacci.cycle;
+package org.test.binary.cycle;
 
-import org.dijkstra.performance.CycleNodePerformanceTest;
 import org.dijkstra.performance.CycleNodePerformanceEnvironment;
-import org.dijkstra.performance.environment.fibonacci.cycle.sequential.Neo4jFibHeapCycleNodeSequentialEnvironment;
-import org.dijkstra.performance.environment.fibonacci.cycle.randomized.Neo4jFibHeapCycleNodeRandomizedEnvironment;
+import org.dijkstra.performance.CycleNodePerformanceTest;
+import org.dijkstra.performance.environment.binary.cycle.randomized.BinHeapCycleNodeRandomizedEnvironment;
+import org.dijkstra.performance.environment.binary.cycle.sequential.BinHeapCycleNodeSequentialEnvironment;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
 
-public class DijkstraPerformanceFibHeapCycleNode {
+public class DijkstraPerformanceBinHeapCycleNode {
 
     protected double[] parameterizedMeasurementConstantDegree(int size, double p) {
 		System.out.printf("size: %d, p: %f\n", size, p);
 
-		CycleNodePerformanceEnvironment environmentSequentialConstant = new Neo4jFibHeapCycleNodeSequentialEnvironment(
+		CycleNodePerformanceEnvironment environmentSequentialConstant = new BinHeapCycleNodeSequentialEnvironment(
 				size,
 				p,
 				1,
 				new Random(42));
 
-		CycleNodePerformanceEnvironment environmentRandomConstant = new Neo4jFibHeapCycleNodeRandomizedEnvironment(
+		CycleNodePerformanceEnvironment environmentRandomConstant = new BinHeapCycleNodeRandomizedEnvironment(
 				size,
 				p,
 				1,
@@ -42,7 +42,7 @@ public class DijkstraPerformanceFibHeapCycleNode {
 	}
 
 	private void writeToCSV(double[] data) {
-        String CSV_FILE = "src/main/java/org/test/result/Fibonacci_CycleNode.csv";
+        String CSV_FILE = "src/main/java/org/test/result/Binary_CycleNode.csv";
         try (PrintWriter writer = new PrintWriter(new FileWriter(CSV_FILE, true))) {
 			writer.printf("%d,%.5f,%.5f,%.5f%n", (int) data[0], data[1], data[2], data[3]);
 		} catch (IOException e) {

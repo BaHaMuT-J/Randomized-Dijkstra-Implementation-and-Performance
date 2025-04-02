@@ -1,18 +1,17 @@
-package org.dijkstra.performance.environment.set.sequential;
+package org.dijkstra.performance.environment.fibonacci.array.sequential;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerSetRandomizedDijkstra;
-import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerSetSequentialDijkstra;
+import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerArraySequentialDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapInteger;
-import org.dijkstra.graph.NeighbourSetGraphGenerator;
+import org.dijkstra.graph.NeighbourArrayGraphGenerator;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
 
 import java.util.Arrays;
 import java.util.Random;
 
-public class Neo4JFibHeapIntegerSetSequentialEnvironment implements IntegerPerformanceEnvironment {
+public class Neo4JFibHeapIntegerArraySequentialEnvironment implements IntegerPerformanceEnvironment {
 
-	public NeighbourSetGraphGenerator generator = new NeighbourSetGraphGenerator();
+	NeighbourArrayGraphGenerator generator = new NeighbourArrayGraphGenerator();
 
 	int[] previous;
 	Neo4JFibonacciIntegerObject[] fibObjectArray;
@@ -23,7 +22,7 @@ public class Neo4JFibHeapIntegerSetSequentialEnvironment implements IntegerPerfo
 	double p;
 	int previousArrayBuilds;
 
-	public Neo4JFibHeapIntegerSetSequentialEnvironment(int size, double p, int previousArrayBuilds, Random random) {
+	public Neo4JFibHeapIntegerArraySequentialEnvironment(int size, double p, int previousArrayBuilds, Random random) {
 		this.size = size;
 		this.p = p;
 		this.previousArrayBuilds = previousArrayBuilds;
@@ -34,7 +33,7 @@ public class Neo4JFibHeapIntegerSetSequentialEnvironment implements IntegerPerfo
 	public void runShortestPath() {
 		for (int i = 0; i < previousArrayBuilds; ++i) {
 			int origin = random.nextInt(size);
-			FibHeapIntegerSetSequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
+			FibHeapIntegerArraySequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
 		}
 	}
 	
@@ -54,8 +53,8 @@ public class Neo4JFibHeapIntegerSetSequentialEnvironment implements IntegerPerfo
 		previous = new int[size];
 		generator.generateRandomGraph(size, p, random);
 
-//		System.out.println(generator.neighbours);
-//		System.out.println(generator.weights);
+//		System.out.println(Arrays.deepToString(generator.neighbours));
+//		System.out.println(Arrays.deepToString(generator.weights));
 
 		fibonacciHeap = new Neo4JFibHeapInteger();
 		fibObjectArray = new Neo4JFibonacciIntegerObject[size];
@@ -65,14 +64,8 @@ public class Neo4JFibHeapIntegerSetSequentialEnvironment implements IntegerPerfo
 		
 		int origin = random.nextInt(size);
 		System.out.println("origin: " + origin);
-		FibHeapIntegerSetSequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
-
-		System.out.printf("previous: %s\n", Arrays.toString(previous));
-		for (int i = 0; i < previous.length; ++i) {
-			System.out.printf("i: %d | neighbor: %s | previous[i]: %d | ", i, generator.neighbours.get(i), previous[i]);
-			int total = FibHeapIntegerSetSequentialDijkstra.pathCalculate(previous, i, generator.weights);
-			System.out.printf("total: %d\n", total);
-		}
+		FibHeapIntegerArraySequentialDijkstra.createPreviousArray(generator.neighbours, generator.weights, origin, previous, fibObjectArray, fibonacciHeap);
+		
 		return previous;
 	}
 }

@@ -4,9 +4,13 @@ import org.dijkstra.fib.wrapper.FibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.FibHeapInteger;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class FibHeapIntegerArraySequentialDijkstra {
+
+	private static Map<Integer, Integer> d;
 	
 	public static void createPreviousArray(int[][] neighbours, int[][] weights, int source, int[] previous, FibonacciIntegerObject[] fibonacciIntegerObjectArray, FibHeapInteger<FibonacciIntegerObject> fibHeapInteger) {
 		
@@ -16,6 +20,9 @@ public class FibHeapIntegerArraySequentialDijkstra {
 		}
 		
 		fibonacciIntegerObjectArray[source].priority = 0;
+
+		d = new HashMap<>();
+		d.put(source, 0);
 		
 		fibHeapInteger.clear();
         for (FibonacciIntegerObject fibonacciIntegerObject : fibonacciIntegerObjectArray) {
@@ -37,6 +44,7 @@ public class FibHeapIntegerArraySequentialDijkstra {
 				int alt = fibonacciIntegerObjectArray[u].priority + weights[u][neighbours[u][i]];
 				if (alt < fibonacciIntegerObjectArray[neighbours[u][i]].priority) {
 					fibHeapInteger.decreasePriority(fibonacciIntegerObjectArray[neighbours[u][i]], alt);
+					d.put(neighbours[u][i], alt);
 					previous[neighbours[u][i]] = u;
 				}
 			}
