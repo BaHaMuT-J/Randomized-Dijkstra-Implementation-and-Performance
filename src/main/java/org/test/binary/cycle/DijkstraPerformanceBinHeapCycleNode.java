@@ -36,7 +36,7 @@ public class DijkstraPerformanceBinHeapCycleNode {
 
 		double[] result = new double[]{ size, p, mSequential, mRandom };
 
-		writeToCSV(result);
+//		writeToCSV(result);
 
 		return result;
 	}

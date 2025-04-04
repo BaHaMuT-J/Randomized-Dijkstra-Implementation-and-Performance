@@ -39,7 +39,7 @@ public class DijkstraPerformanceBinHeapIntegerSet {
 
 		double[] result = new double[]{ size, p, mSequential, mRandom };
 
-		writeToCSV(result);
+//		writeToCSV(result);
 
 		return result;
 	}
@@ -51,28 +51,5 @@ public class DijkstraPerformanceBinHeapIntegerSet {
 		} catch (IOException e) {
 			System.err.println("Error writing to CSV file: " + e.getMessage());
 		}
-	}
-
-	protected void testPreviousArray(int size, double p) {
-		System.out.printf("size: %d, p: %f\n", size, p);
-
-		IntegerPerformanceEnvironment environmentSequentialIntegerArray = new BinHeapIntegerArraySequentialEnvironment(
-				size,
-				p,
-				1,
-				new Random(42));
-
-		IntegerPerformanceEnvironment environmentRandomIntegerArray = new BinHeapIntegerArrayRandomizedEnvironment(
-				size,
-				p,
-				1,
-				new Random(42)
-		);
-
-		int[] previousSequentialIntegerArray = environmentSequentialIntegerArray.testPrevious(42);
-		int[] previousRandomIntegerArray = environmentRandomIntegerArray.testPrevious(42);
-
-		System.out.println(Arrays.toString(previousSequentialIntegerArray));
-		System.out.println(Arrays.toString(previousRandomIntegerArray));
 	}
 }

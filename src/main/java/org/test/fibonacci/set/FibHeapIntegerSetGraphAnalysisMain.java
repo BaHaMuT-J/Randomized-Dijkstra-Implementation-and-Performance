@@ -12,36 +12,16 @@ public class FibHeapIntegerSetGraphAnalysisMain extends DijkstraPerformanceFibHe
 		runWithConstantP(0.5);
 		runWithConstantP(0.7);
 		runWithConstantP(0.9);
-
-//		testPrevious(0.5);
 	}
 	
 	private void runWithConstantP(double p) {
-		int n = 100;
+		int n = 1000;
 
 		double[][] results = new double[n][];
-		for (int i = 1; i <= n; ++i) {
+		for (int i = n; i <= n; ++i) {
 			results[i-1] = parameterizedMeasurementIntegerSet(10 * i, p);
 		}
-//		for (int i = 0; i < n; ++i) {
-//			if (results[i] == null) {
-//				continue;
-//			}
-//			for (int j = 0; j < results[i].length; ++j) {
-//				System.out.print(results[i][j]);
-//				System.out.print(",");
-//			}
-//			System.out.println();
-//		}
 		
-	}
-
-	private void testPrevious(double p) {
-		int n = 10;
-
-		for (int i = 1; i <= n; ++i) {
-			testPreviousArray(10 * i, p);
-		}
 	}
 
 }

@@ -1,12 +1,11 @@
 package org.dijkstra.performance.environment.fibonacci.array.randomized;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerArrayRandomizedDijkstra;
+import org.dijkstra.algo.randomized.FibHeapIntegerArrayRandomizedDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapInteger;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;
 import org.dijkstra.performance.IntegerPerformanceEnvironment;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Neo4JFibHeapIntegerArrayRandomizedEnvironment implements IntegerPerformanceEnvironment {

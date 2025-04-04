@@ -1,6 +1,6 @@
 package org.dijkstra.performance.environment.fibonacci.cycle.sequential;
 
-import org.dijkstra.algo.fibonacci.sequential.FibHeapCycleNodeSequentialDijkstra;
+import org.dijkstra.algo.sequential.FibHeapCycleNodeSequentialDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciCycleNodeObject;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapCycleNode;

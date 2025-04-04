@@ -1,6 +1,6 @@
 package org.dijkstra.performance.environment.binary.array.sequential;
 
-import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerArraySequentialDijkstra;
+import org.dijkstra.algo.sequential.FibHeapIntegerArraySequentialDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.heap.BinaryHeapInteger;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;

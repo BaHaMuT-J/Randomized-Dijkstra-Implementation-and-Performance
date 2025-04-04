@@ -21,16 +21,6 @@ public class FibHeapCycleNodeGraphAnalysisMain extends DijkstraPerformanceFibHea
 		for (int i = 1; i <= n; ++i) {
 			results[i-1] = parameterizedMeasurementConstantDegree(10 * i, p);
 		}
-//		for (int i = 0; i < n; ++i) {
-//			if (results[i] == null) {
-//				continue;
-//			}
-//			for (int j = 0; j < results[i].length; ++j) {
-//				System.out.print(results[i][j]);
-//				System.out.print(",");
-//			}
-//			System.out.println();
-//		}
 		
 	}
 

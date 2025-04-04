@@ -1,7 +1,6 @@
 package org.dijkstra.performance.environment.fibonacci.set.randomized;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerSetRandomizedDijkstra;
-import org.dijkstra.algo.fibonacci.sequential.FibHeapIntegerSetSequentialDijkstra;
+import org.dijkstra.algo.randomized.FibHeapIntegerSetRandomizedDijkstra;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibHeapInteger;
 import org.dijkstra.fib.wrapper.heap.Neo4JFibonacciIntegerObject;
 import org.dijkstra.graph.NeighbourSetGraphGenerator;

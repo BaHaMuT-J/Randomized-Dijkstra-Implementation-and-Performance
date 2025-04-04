@@ -10,11 +10,11 @@ import org.test.fibonacci.array.FibHeapIntegerArrayGraphAnalysisMain;
 public class FibHeapAutoBenchMark {
 
     public static void main(String[] args) {
-//        FibHeapCycleNodeGraphAnalysisMain.main(args);
-//        FibHeapIntegerSetGraphAnalysisMain.main(args);
-//        FibHeapIntegerArrayGraphAnalysisMain.main(args);
+        FibHeapCycleNodeGraphAnalysisMain.main(args);
+        FibHeapIntegerSetGraphAnalysisMain.main(args);
+        FibHeapIntegerArrayGraphAnalysisMain.main(args);
 
-//        BinHeapIntegerArrayGraphAnalysisMain.main(args);
+        BinHeapIntegerArrayGraphAnalysisMain.main(args);
         BinHeapIntegerSetGraphAnalysisMain.main(args);
         BinHeapCycleNodeGraphAnalysisMain.main(args);
     }

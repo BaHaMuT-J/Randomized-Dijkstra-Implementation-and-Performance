@@ -1,6 +1,6 @@
 package org.dijkstra.performance.environment.binary.array.randomized;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapIntegerArrayRandomizedDijkstra;
+import org.dijkstra.algo.randomized.FibHeapIntegerArrayRandomizedDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciIntegerObject;
 import org.dijkstra.fib.wrapper.heap.BinaryHeapInteger;
 import org.dijkstra.graph.NeighbourArrayGraphGenerator;

@@ -1,6 +1,6 @@
 package org.dijkstra.performance.environment.binary.cycle.randomized;
 
-import org.dijkstra.algo.fibonacci.randomized.FibHeapCycleNodeRandomizedDijkstra;
+import org.dijkstra.algo.randomized.FibHeapCycleNodeRandomizedDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
 import org.dijkstra.fib.wrapper.heap.BinaryHeapCycleNode;
 import org.dijkstra.graph.ConstantDegreeGraph;

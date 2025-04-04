@@ -37,7 +37,7 @@ public class DijkstraPerformanceFibHeapIntegerSet {
 
 		double[] result = new double[]{ size, p, mSequential, mRandom };
 
-		writeToCSV(result);
+//		writeToCSV(result);
 
 		return result;
 	}
@@ -49,28 +49,5 @@ public class DijkstraPerformanceFibHeapIntegerSet {
 		} catch (IOException e) {
 			System.err.println("Error writing to CSV file: " + e.getMessage());
 		}
-	}
-
-	protected void testPreviousArray(int size, double p) {
-		System.out.printf("size: %d, p: %f\n", size, p);
-
-		IntegerPerformanceEnvironment environmentSequentialIntegerSet = new Neo4JFibHeapIntegerSetSequentialEnvironment(
-				size,
-				p,
-				1,
-				new Random(42));
-
-		IntegerPerformanceEnvironment environmentRandomIntegerSet = new Neo4JFibHeapIntegerSetRandomizedEnvironment(
-				size,
-				p,
-				1,
-				new Random(42)
-		);
-
-		int[] previousSequentialIntegerSet = environmentSequentialIntegerSet.testPrevious(42);
-		int[] previousRandomIntegerSet = environmentRandomIntegerSet.testPrevious(42);
-
-		System.out.println(Arrays.toString(previousSequentialIntegerSet));
-		System.out.println(Arrays.toString(previousRandomIntegerSet));
 	}
 }

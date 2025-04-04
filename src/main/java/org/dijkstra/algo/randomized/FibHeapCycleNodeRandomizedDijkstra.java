@@ -1,4 +1,4 @@
-package org.dijkstra.algo.fibonacci.randomized;
+package org.dijkstra.algo.randomized;
 
 import org.dijkstra.fib.wrapper.FibHeapCycleNode;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;

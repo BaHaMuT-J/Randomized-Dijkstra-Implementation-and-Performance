@@ -1,4 +1,4 @@
-package org.dijkstra.algo.fibonacci.sequential;
+package org.dijkstra.algo.sequential;
 
 import org.dijkstra.fib.wrapper.FibHeapCycleNode;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;

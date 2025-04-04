@@ -1,6 +1,6 @@
 package org.dijkstra.performance.environment.binary.cycle.sequential;
 
-import org.dijkstra.algo.fibonacci.sequential.FibHeapCycleNodeSequentialDijkstra;
+import org.dijkstra.algo.sequential.FibHeapCycleNodeSequentialDijkstra;
 import org.dijkstra.fib.wrapper.FibonacciCycleNodeObject;
 import org.dijkstra.fib.wrapper.heap.BinaryHeapCycleNode;
 import org.dijkstra.graph.ConstantDegreeGraph;
