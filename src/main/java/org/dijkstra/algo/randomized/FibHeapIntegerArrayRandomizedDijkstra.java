@@ -55,14 +55,12 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 			object.priority = node == source ? 0 : Integer.MAX_VALUE;
 			fibonacciIntegerObjectArray[node] = object;
 
-			// Add all FibonacciIntegerObject in FibonacciHeap
 			fibHeapInteger.add(object);
 		}
 
 		Set<Integer> extractedNodes = new HashSet<>();
 		while (fibHeapInteger.size() != 0) {
 
-			// extract min
 			FibonacciIntegerObject min = fibHeapInteger.extractMin();
 			Integer u = min.node;
 			extractedNodes.add(u);
@@ -81,7 +79,7 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 						int newPriority = d.get(z1) + w_z1_z2 + dist_v.get(z2);
 						int candidate = firstInBallMap.get(v);
 						if (Objects.equals(z2, v)) {
-							candidate = z2;
+							candidate = z1;
 						}
 						relax(candidate, v, newPriority, R, extractedNodes, fibonacciIntegerObjectArray, fibHeapInteger, previous);
 					}
@@ -165,7 +163,6 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 
 		while (fibHeapInteger.size() != 0) {
 
-			// extract min
 			FibonacciIntegerObject min = fibHeapInteger.extractMin();
 			Integer u = min.node;
 			shortestDist.put(u, min.priority);
@@ -269,10 +266,14 @@ public class FibHeapIntegerArrayRandomizedDijkstra {
 		return path;
 	}
 
-	public static int pathCalculate(int[] path, int[][] weights) {
+	public static int pathCalculate(int[] previous, int destination, int[][] weights) {
 		int totalWeight = 0;
-		for (int i = 1; i < path.length; ++i) {
-			totalWeight += weights[path[i-1]][path[i]];
+		int dest = destination;
+		int prev = previous[destination];
+		while (prev != -1) {
+			totalWeight += weights[prev][dest];
+			dest = prev;
+			prev = previous[prev];
 		}
 		return totalWeight;
 	}

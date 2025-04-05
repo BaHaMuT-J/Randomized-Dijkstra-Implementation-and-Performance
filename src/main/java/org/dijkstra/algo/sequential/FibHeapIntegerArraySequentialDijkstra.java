@@ -70,5 +70,17 @@ public class FibHeapIntegerArraySequentialDijkstra {
 		}
 		
 		return path;
-	}		
+	}
+
+	public static int pathCalculate(int[] previous, int destination, int[][] weights) {
+		int totalWeight = 0;
+		int dest = destination;
+		int prev = previous[destination];
+		while (prev != -1) {
+			totalWeight += weights[prev][dest];
+			dest = prev;
+			prev = previous[prev];
+		}
+		return totalWeight;
+	}
 }

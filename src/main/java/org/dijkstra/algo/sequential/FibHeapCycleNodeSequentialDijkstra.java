@@ -24,7 +24,6 @@ public class FibHeapCycleNodeSequentialDijkstra {
 			object.distance = Objects.equals(node, source) ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
 
-			// Add all FibonacciCycleNodeObject in FibonacciHeap
 			fibonacciHeap.add(object);
 		}
 		previous.put(source, new CycleNode(-1, -1));
@@ -33,8 +32,7 @@ public class FibHeapCycleNodeSequentialDijkstra {
 		d.put(source, 0);
 				
 		while (fibonacciHeap.size() != 0) {
-			
-			// extract min
+
 			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 						
@@ -69,5 +67,17 @@ public class FibHeapCycleNodeSequentialDijkstra {
 		}
 		
 		return path;
-	}		
+	}
+
+	public static int pathCalculate(Map<CycleNode, CycleNode> previous, CycleNode destination, Map<CycleNode, Map<CycleNode, Integer>> weights) {
+		int totalWeight = 0;
+		CycleNode dest = destination;
+		CycleNode prev = previous.get(destination);
+		while (!Objects.equals(prev, new CycleNode(-1, -1))) {
+			totalWeight += weights.get(prev).get(dest);
+			dest = prev;
+			prev = previous.get(prev);
+		}
+		return totalWeight;
+	}
 }

@@ -57,14 +57,12 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 			object.distance = Objects.equals(node, source) ? 0 : Integer.MAX_VALUE;
 			fibonacciObjectMap.put(node, object);
 
-			// Add all FibonacciCycleNodeObject in FibonacciHeap
 			fibonacciHeap.add(object);
 		}
 
 		Set<CycleNode> extractedNodes = new HashSet<>();
 		while (fibonacciHeap.size() != 0) {
 
-			// extract min
 			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 			extractedNodes.add(u);
@@ -83,7 +81,7 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 						int newDistance = d.get(z1) + w_z1_z2 + dist_v.get(z2);
 						CycleNode candidate = firstInBallMap.get(v);
 						if (Objects.equals(z2, v)) {
-							candidate = z2;
+							candidate = z1;
 						}
 						relax(candidate, v, newDistance, R, extractedNodes, fibonacciObjectMap, fibonacciHeap, previous);
 					}
@@ -168,7 +166,6 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 
 		while (fibonacciHeap.size() != 0) {
 
-			// extract min
 			FibonacciCycleNodeObject min = fibonacciHeap.extractMin();
 			CycleNode u = min.node;
 			shortestDist.put(u, min.distance);
@@ -270,5 +267,17 @@ public class FibHeapCycleNodeRandomizedDijkstra {
 		}
 
 		return path;
+	}
+
+	public static int pathCalculate(Map<CycleNode, CycleNode> previous, CycleNode destination, Map<CycleNode, Map<CycleNode, Integer>> weights) {
+		int totalWeight = 0;
+		CycleNode dest = destination;
+		CycleNode prev = previous.get(destination);
+		while (!Objects.equals(prev, new CycleNode(-1, -1))) {
+			totalWeight += weights.get(prev).get(dest);
+			dest = prev;
+			prev = previous.get(prev);
+		}
+		return totalWeight;
 	}
 }
